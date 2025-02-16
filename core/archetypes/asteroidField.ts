@@ -1,8 +1,8 @@
 import { randomInt, random } from "mathjs";
-import type { Position2D } from "@core/components/position";
+import type { Vec2 } from "ogl";
+import { fromPolar } from "@core/utils/misc";
 import type { AsteroidSpawn } from "../components/asteroidSpawn";
 import { Entity } from "../entity";
-import { createRenderGraphics } from "../components/renderGraphics";
 import type { Sim } from "../sim";
 import type { RequireComponent } from "../tsHelpers";
 import type { Sector } from "./sector";
@@ -12,7 +12,6 @@ export const asteroidFieldComponents = [
   "asteroidSpawn",
   "children",
   "position",
-  "renderGraphics",
 ] as const;
 
 export type AsteroidFieldComponent = (typeof asteroidFieldComponents)[number];
@@ -44,10 +43,7 @@ export function spawn(field: AsteroidField) {
   const asteroid = createAsteroid(
     sim,
     field,
-    [
-      asteroidDistance * Math.cos(asteroidAngle) + field.cp.position.coord[0],
-      asteroidDistance * Math.sin(asteroidAngle) + field.cp.position.coord[1],
-    ],
+    fromPolar(asteroidAngle, asteroidDistance).add(field.cp.position.coord),
     amount
   );
   field.cp.children.entities.push(asteroid.id);
@@ -57,7 +53,7 @@ export function spawn(field: AsteroidField) {
 
 export function createAsteroidField(
   sim: Sim,
-  position: Position2D,
+  position: Vec2,
   sector: Sector,
   data: Omit<AsteroidSpawn, "name" | "amount">
 ) {
@@ -76,8 +72,7 @@ export function createAsteroidField(
       angle: 0,
       sector: sector.id,
       moved: false,
-    })
-    .addComponent(createRenderGraphics("asteroidField"));
+    });
 
   return asteroidField(entity);
 }

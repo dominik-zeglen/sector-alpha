@@ -30,10 +30,6 @@ export function undockShip(
   ship.cp.dockable.dockedIn = null;
   ship.cp.dockable.undocking = false;
   ship.cp.drive.active = true;
-
-  if (ship.cp.render) {
-    ship.cp.render.hidden &= ~HideReason.Docked;
-  }
 }
 
 export function dockOrder(

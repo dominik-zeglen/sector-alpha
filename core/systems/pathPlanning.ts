@@ -1,7 +1,9 @@
-import { Graph, alg } from "graphlib";
+import graphlib from "graphlib";
 import type { Sim } from "../sim";
 import { findInAncestors } from "../utils/findInAncestors";
 import { System } from "./system";
+
+const { Graph, alg } = graphlib;
 
 export function regen(sim: Sim) {
   const graph = new Graph({ directed: false });

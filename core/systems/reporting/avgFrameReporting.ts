@@ -1,5 +1,6 @@
 import type { Sim } from "@core/sim";
 import { Observable } from "@core/utils/observer";
+import { actionLoader } from "@core/actionLoader";
 import { System } from "../system";
 
 export const frameData = new Observable<number[]>("frameData", false);
@@ -14,7 +15,7 @@ export class AvgFrameReportingSystem extends System {
   apply(sim: Sim): void {
     super.apply(sim);
 
-    this.sim.actions.register(
+    actionLoader.register(
       {
         type: "basic",
         slug: "avgFrameTie",

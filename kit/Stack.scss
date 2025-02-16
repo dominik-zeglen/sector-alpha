@@ -15,11 +15,11 @@
     position: relative;
 
     &:not(:last-child):after {
-      height: 1rem;
+      height: usesize(1.5);
       width: usesize(0.1);
       position: absolute;
       top: 0;
-      right: calc(usesize(0.8) * -1);
+      right: usesize(-0.8);
       background-color: var(--palette-border);
       display: block;
       content: "";

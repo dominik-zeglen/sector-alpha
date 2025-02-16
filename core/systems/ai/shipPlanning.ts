@@ -60,7 +60,7 @@ export function requestShip(
   } else {
     createShip(faction.sim, {
       ...bp,
-      position: [...shipyard.cp.position.coord],
+      position: shipyard.cp.position.coord.clone(),
       owner: faction,
       sector: asSector(shipyard.sim.getOrThrow(shipyard.cp.position.sector)),
       name: bp.name,

@@ -3,14 +3,14 @@ import settings from "@core/settings";
 import type { Sim } from "@core/sim";
 import type { RequireComponent } from "@core/tsHelpers";
 import { findInAncestors } from "@core/utils/findInAncestors";
-import { distance } from "mathjs";
 import type { DockSize } from "@core/components/dockable";
 import type { Entity } from "@core/entity";
 import { stopCruise } from "@core/utils/moving";
-import { getAngleDiff } from "@core/utils/misc";
+import { Vec2 } from "ogl";
 import { regenCooldown } from "./hitpointsRegenerating";
 import { EntityIndex } from "./utils/entityIndex";
 import { System } from "./system";
+import { transport3D } from "./transport3d";
 
 const sizeMultipliers: Record<DockSize, [number, number, number]> = {
   large: [0.1, -5, 10],
@@ -22,17 +22,47 @@ export function getEvasionChance(speed: number, size: DockSize): number {
   return Math.max(0, ((b / speed) * 10 * a + c) / 100);
 }
 
+function getAngleDiff(
+  origin: RequireComponent<"position">,
+  target: RequireComponent<"position">
+): number {
+  const targetVector = new Vec2()
+    .copy(target.cp.position.coord)
+    .sub(origin.cp.position.coord);
+
+  const angle =
+    Math.atan2(targetVector[1], targetVector[0]) - origin.cp.position.angle;
+
+  return angle > Math.PI
+    ? angle - 2 * Math.PI
+    : angle < -Math.PI
+    ? angle + 2 * Math.PI
+    : angle;
+}
+
 export function isInDistance(
   entity: RequireComponent<"damage">,
   target: RequireComponent<"position">,
   r: number = entity.cp.damage.range
 ): boolean {
   return (
-    (distance(
-      findInAncestors(entity, "position").cp.position.coord,
+    findInAncestors(entity, "position").cp.position.coord.distance(
       target.cp.position.coord
-    ) as number) <= r
+    ) <= r
   );
+}
+
+export function isInRange(
+  entity: RequireComponent<"damage">,
+  target: RequireComponent<"position">
+) {
+  const inDistance = isInDistance(entity, target);
+  if (!inDistance) return false;
+
+  const parentWithPosition = findInAncestors(entity, "position");
+  const angleDiff = getAngleDiff(parentWithPosition, target);
+
+  return Math.abs(angleDiff) <= entity.cp.damage.angle / 2;
 }
 
 function shouldAttackBack(
@@ -91,22 +121,16 @@ export class AttackingSystem extends System {
         continue;
       }
 
+      if (entity.cp.drive?.state === "cruise") {
+        continue;
+      }
+
       const target = this.sim
         .getOrThrow(entity.cp.damage.targetId)
         .requireComponents(["position", "hitpoints"]);
       const entityOrParent = findInAncestors(entity, "position");
 
-      if (
-        !isInDistance(entity, target) ||
-        Math.abs(
-          getAngleDiff(entityOrParent, [
-            target.cp.position.coord[0] - entityOrParent.cp.position.coord[0],
-            target.cp.position.coord[1] - entityOrParent.cp.position.coord[1],
-          ])
-        ) >
-          entity.cp.damage.angle / 2
-      )
-        continue;
+      if (!isInRange(entity, target)) continue;
 
       entity.cooldowns.use(cdKey, entity.cp.damage.cooldown);
       if (
@@ -115,6 +139,9 @@ export class AttackingSystem extends System {
         Math.random() >
           getEvasionChance(target.cp.movable.velocity, target.cp.dockable.size)
       ) {
+        transport3D.hooks.shoot.notify(
+          entity.requireComponents(["position", "damage"])
+        );
         changeHp(target, entity.cp.damage.value);
         const parentEntity = entityOrParent;
 

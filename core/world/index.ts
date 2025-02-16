@@ -8,6 +8,7 @@ import { facilityModules } from "@core/archetypes/facilityModule";
 import { changeRelations } from "@core/components/relations";
 import settings from "@core/settings";
 import { find } from "@fxts/core";
+import { Vec2 } from "ogl";
 import { createFaction } from "../archetypes/faction";
 import { createShip } from "../archetypes/ship";
 import { changeBudgetMoney, createBudget } from "../components/budget";
@@ -122,7 +123,7 @@ export function getFixedWorld(sim: Sim): Promise<void> {
   const playerShip = createShip(sim, {
     ...pickRandom(shipClasses.filter(({ slug }) => slug === "courierA")),
     angle: random(-Math.PI, Math.PI),
-    position: [random(-1, 1), random(-1, 1)],
+    position: new Vec2(random(-1, 1), random(-1, 1)),
     owner: player,
     sector: startingSector,
   });
@@ -131,7 +132,7 @@ export function getFixedWorld(sim: Sim): Promise<void> {
   const builderShip = createShip(sim, {
     ...pickRandom(shipClasses.filter(({ role }) => role === "building")),
     angle: random(-Math.PI, Math.PI),
-    position: [random(-1, 1), random(-1, 1)],
+    position: new Vec2(random(-1, 1), random(-1, 1)),
     owner: player,
     sector: startingSector,
   });
@@ -140,7 +141,7 @@ export function getFixedWorld(sim: Sim): Promise<void> {
   const storageShip = createShip(sim, {
     ...pickRandom(shipClasses.filter(({ role }) => role === "storage")),
     angle: random(-Math.PI, Math.PI),
-    position: [random(-1, 1), random(-1, 1)],
+    position: new Vec2(random(-1, 1), random(-1, 1)),
     owner: player,
     sector: startingSector,
   });
@@ -151,7 +152,9 @@ export function getFixedWorld(sim: Sim): Promise<void> {
     sim.index.sectors.get()
   )!;
   const camera = sim.index.settings.get()[0].cp.camera;
-  camera.position = hecsToCartesian(sector.cp.hecsPosition.value, sectorSize);
+  camera.position.set(
+    hecsToCartesian(sector.cp.hecsPosition.value, sectorSize)
+  );
 
   return Promise.resolve();
 }

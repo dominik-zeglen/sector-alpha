@@ -11,7 +11,7 @@ import { pickRandom } from "@core/utils/generators";
 import { moveToActions } from "@core/utils/moving";
 import { shipClasses } from "@core/world/ships";
 import { filter, find, map, pipe, toArray } from "@fxts/core";
-import { distance, random, randomInt } from "mathjs";
+import { random, randomInt } from "mathjs";
 import { fromPolar } from "@core/utils/misc";
 import { System } from "./system";
 import { EntityIndex } from "./utils/entityIndex";
@@ -27,8 +27,8 @@ function returnToFlagship(unassigned: Ship[], flagships: Ship[]) {
       const closestFlagship = flagships.reduce((prev, cur) => {
         if (ship.cp.position.sector === cur.cp.position.sector) return cur;
         if (
-          distance(prev.cp.position.coord, ship.cp.position.coord) >
-          distance(cur.cp.position.coord, ship.cp.position.coord)
+          prev.cp.position.coord.squaredDistance(ship.cp.position.coord) >
+          cur.cp.position.coord.squaredDistance(ship.cp.position.coord)
         )
           return cur;
         return prev;
@@ -102,7 +102,7 @@ function spawnSquad(
       createShip(sim, {
         ...shipClasses.find((sc) => sc.slug === "roach")!,
         owner: faction,
-        position: [...flagship.cp.position.coord],
+        position: flagship.cp.position.coord.clone(),
         sector,
       })
     );
@@ -116,7 +116,7 @@ function spawnSquad(
       createShip(sim, {
         ...shipClasses.find((sc) => sc.slug === "stingray")!,
         owner: faction,
-        position: [...flagship.cp.position.coord],
+        position: flagship.cp.position.coord.clone(),
         sector,
       })
     );

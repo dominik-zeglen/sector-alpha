@@ -33,8 +33,8 @@
   border: none;
   background: none;
   color: var(--palette-text-2);
-  height: 1rem;
-  width: 1rem;
+  height: usesize(1.5);
+  width: usesize(1.5);
   padding: 0;
 }
 
@@ -48,13 +48,13 @@ $padding: usesize(0.4);
     border-radius: usesize(0.2);
     content: "";
     display: block;
-    height: calc(1rem + $padding * 2);
+    height: calc(usesize(1.5) + $padding * 2);
     left: -$padding;
     opacity: 0;
     position: absolute;
     top: -$padding;
     transition: 200ms;
-    width: calc(1rem + $padding * 2);
+    width: calc(usesize(1.5) + $padding * 2);
     z-index: -1;
   }
 

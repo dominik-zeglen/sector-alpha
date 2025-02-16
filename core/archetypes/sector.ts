@@ -2,17 +2,14 @@ import mapValues from "lodash/mapValues";
 import type { PositionHex } from "@core/components/hecsPosition";
 import { perCommodity } from "@core/utils/perCommodity";
 import { Entity } from "../entity";
-import { createRenderGraphics } from "../components/renderGraphics";
 import { MissingComponentError } from "../errors";
 import type { Sim } from "../sim";
 import type { RequireComponent } from "../tsHelpers";
-import "@pixi/graphics-extras";
 import { mineableCommodities } from "../economy/commodity";
 
 export const sectorComponents = [
   "hecsPosition",
   "name",
-  "renderGraphics",
   "sectorStats",
 ] as const;
 
@@ -54,7 +51,6 @@ export function createSector(
       availableResources: mapValues(mineableCommodities, () => [] as number[]),
       prices: perCommodity(() => ({ buy: [], sell: [] })),
     })
-    .addComponent(createRenderGraphics("sector"))
     .addTag("sector")
     .addTag("selection");
 

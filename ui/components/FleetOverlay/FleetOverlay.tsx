@@ -1,9 +1,11 @@
 import type { Ship } from "@core/archetypes/ship";
-import { getSelected } from "@core/components/selection";
 import { filter, map, pipe, toArray } from "@fxts/core";
-import { useContextMenu, useGameOverlay, useSim } from "@ui/atoms";
+import { useSim } from "@ui/atoms";
 import React from "react";
 import type { Sim } from "@core/sim";
+import { useContextMenuStore } from "@ui/state/contextMenu";
+import { useGameStore } from "@ui/state/game";
+import { Vec2 } from "ogl";
 import { useOverlayRegister } from "../Overlay/Overlay";
 import { FleetOverlayComponent } from "./FleetOverlayComponent";
 
@@ -20,37 +22,31 @@ function getSubordinateTree(commander: Ship, sim: Sim) {
 
 export const FleetOverlay: React.FC = () => {
   const [sim] = useSim();
-  const [overlay, setOverlay] = useGameOverlay();
+  const [[overlay, selectedUnits], gameStore] = useGameStore((store) => [
+    store.overlay,
+    store.selectedUnits,
+  ]);
   useOverlayRegister("fleet");
-  const [selected, setSelectedState] = React.useState<number | undefined>(
-    getSelected(sim)?.id
-  );
-  const [, setMenu] = useContextMenu();
+  const [, contextMenuStore] = useContextMenuStore(() => []);
 
   const setSelected = (id: number) => {
-    sim.index.settings.get()[0].cp.selectionManager.id = id;
-    setSelectedState(id);
+    gameStore.setSelectedUnits([sim.getOrThrow(id)]);
   };
   const onFocus = () => {
-    sim.index.settings.get()[0].cp.selectionManager.focused = true;
-    setOverlay(null);
-  };
-  const onTarget = (id: number) => {
-    sim.index.settings.get()[0].cp.selectionManager.secondaryId = id;
+    gameStore.focus();
+    gameStore.closeOverlay();
   };
   const onContextMenu = (
     id: number,
     event: React.MouseEvent<HTMLButtonElement>
   ) => {
     event.preventDefault();
-    onTarget(id);
-    if (id !== selected) {
-      setMenu({
-        active: true,
-        position: [event.clientX, event.clientY],
+    if (!selectedUnits.some((unit) => unit.id === id)) {
+      contextMenuStore.open({
+        position: new Vec2(event.clientX, event.clientY),
         worldPosition: undefined!,
         sector: null,
-        overlay: true,
+        target: sim.getOrThrow(id),
       });
     }
   };
@@ -92,7 +88,7 @@ export const FleetOverlay: React.FC = () => {
     <FleetOverlayComponent
       fleets={fleets}
       unassigned={unassigned}
-      selected={selected}
+      selected={selectedUnits.map((unit) => unit.id)}
       onContextMenu={onContextMenu}
       onSelect={setSelected}
       onFocus={onFocus}

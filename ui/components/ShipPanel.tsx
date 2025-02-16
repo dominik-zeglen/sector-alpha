@@ -19,7 +19,7 @@ const ShipPanel: React.FC<{ entity: Ship; showSensitive: boolean }> = ({
       {!!commander && (
         <>
           <Commander
-            commander={commander}
+            commander={commander.requireComponents(["position"])}
             ship={ship.requireComponents(["commander", "orders"])}
           />
           <hr />

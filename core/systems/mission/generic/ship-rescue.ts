@@ -7,7 +7,7 @@ import shipNames from "@core/world/data/shipNames.json";
 import { shipClasses } from "@core/world/ships";
 import type { Ship } from "@core/archetypes/ship";
 import { createShip, createShipName } from "@core/archetypes/ship";
-import { add, random } from "mathjs";
+import { random } from "mathjs";
 import { fromPolar } from "@core/utils/misc";
 import { getSectorsInTeleportRange } from "@core/economy/utils";
 import { teleport } from "@core/utils/moving";
@@ -102,10 +102,7 @@ export const genericShipRescueMissionHandler: MissionHandler = {
     const ship = sim.getOrThrow<Ship>(offer.data!.shipId);
     teleport(
       ship,
-      add(
-        playerShip.cp.position.coord,
-        fromPolar(random(-Math.PI, Math.PI), 6)
-      ),
+      fromPolar(random(-Math.PI, Math.PI), 6).add(playerShip.cp.position.coord),
       playerShip.cp.position.sector
     );
     ship.cp.orders.value = [];
@@ -116,9 +113,8 @@ export const genericShipRescueMissionHandler: MissionHandler = {
         createShip(sim, {
           ...pickRandom(shipClasses.filter(({ slug }) => slug === "roach")),
           angle: random(-Math.PI, Math.PI),
-          position: add(
-            ship.cp.position.coord,
-            fromPolar(random(-Math.PI, Math.PI), 3)
+          position: fromPolar(random(-Math.PI, Math.PI), 3).add(
+            ship.cp.position.coord
           ),
           owner: sim.index.ai.get().find((f) => f.cp.name.slug === "PIR")!,
           sector: sim.getOrThrow<Sector>(ship.cp.position.sector),

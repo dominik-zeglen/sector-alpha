@@ -3,32 +3,26 @@ import React from "react";
 import type { AsteroidField } from "@core/archetypes/asteroidField";
 import { createWaypoint } from "@core/archetypes/waypoint";
 import { mineAction } from "@core/components/orders";
-import { getSelected } from "@core/components/selection";
 import { moveToActions } from "@core/utils/moving";
 import { DropdownOption } from "@kit/Dropdown";
 import { isOwnedByPlayer } from "@core/utils/misc";
-import type { Position2D } from "@core/components/position";
-import { useContextMenu, useSim } from "../../atoms";
+import { useGameStore } from "@ui/state/game";
+import { useContextMenuStore } from "@ui/state/contextMenu";
+import { useSim } from "../../atoms";
 import { NoAvailableActions } from "./NoAvailableActions";
+import { Wrapper } from "./Wrapper";
 
 export const ShipToSpace: React.FC = () => {
   const [sim] = useSim();
-  const [menu] = useContextMenu();
-  const selected = getSelected(sim)!;
-
-  if (!selected) {
-    return null;
-  }
+  const [[menu], menuStore] = useContextMenuStore((store) => [store.state]);
+  const [[selected]] = useGameStore((store) => [store.selectedUnits]);
 
   const canBeOrdered =
-    isOwnedByPlayer(selected) &&
-    selected?.hasComponents(["orders", "position"]);
+    selected.length > 0 &&
+    isOwnedByPlayer(selected[0]) &&
+    selected.every((unit) => unit.hasComponents(["orders", "position"]));
 
-  if (!canBeOrdered) {
-    return <NoAvailableActions />;
-  }
-
-  const fieldsToMine = selected.cp.mining
+  const fieldsToMine = selected.every((unit) => unit.hasComponents(["mining"]))
     ? sim.index.asteroidFields
         .get()
         .filter(
@@ -40,48 +34,51 @@ export const ShipToSpace: React.FC = () => {
         )
     : [];
 
-  const entity = selected!.requireComponents(["orders", "position"]);
-
   const onMove = () => {
-    entity.cp.orders!.value.push({
-      origin: "manual",
-      type: "move",
-      actions: moveToActions(
-        entity,
-        createWaypoint(sim, {
-          sector: menu.sector!.id,
-          value: menu.worldPosition as Position2D,
-          owner: entity.id,
-        })
-      ),
-    });
+    for (const unit of selected) {
+      unit.cp.orders!.value.push({
+        origin: "manual",
+        type: "move",
+        actions: moveToActions(
+          unit,
+          createWaypoint(sim, {
+            sector: menu.sector!.id,
+            value: menu.worldPosition,
+            owner: unit.id,
+          })
+        ),
+      });
+    }
   };
 
   const onMine = (field: AsteroidField) => {
-    entity.cp.orders!.value.push({
-      origin: "manual",
-      type: "mine",
-      actions: [
-        ...moveToActions(entity, field),
-        mineAction({
-          targetFieldId: field.id,
-          targetRockId: null,
-        }),
-      ],
-    });
+    for (const unit of selected) {
+      unit.cp.orders!.value.push({
+        origin: "manual",
+        type: "mine",
+        actions: [
+          ...moveToActions(unit, field),
+          mineAction({
+            targetFieldId: field.id,
+            targetRockId: null,
+          }),
+        ],
+      });
+    }
   };
 
   const onFacilityDeploy = () => {
-    entity.cp.orders!.value.push({
+    const unit = selected[0];
+    unit.cp.orders!.value.push({
       origin: "manual",
       type: "move",
       actions: [
         ...moveToActions(
-          entity,
+          unit,
           createWaypoint(sim, {
             sector: menu.sector!.id,
-            value: menu.worldPosition as Position2D,
-            owner: entity.id,
+            value: menu.worldPosition,
+            owner: unit.id,
           })
         ),
         {
@@ -91,8 +88,27 @@ export const ShipToSpace: React.FC = () => {
     });
   };
 
+  React.useEffect(() => {
+    if (
+      canBeOrdered &&
+      fieldsToMine.length === 0 &&
+      selected.every((unit) => !unit.cp.deployable)
+    ) {
+      onMove();
+      menuStore.close();
+    }
+  }, []);
+
+  if (!canBeOrdered) {
+    return (
+      <Wrapper>
+        <NoAvailableActions />
+      </Wrapper>
+    );
+  }
+
   return (
-    <>
+    <Wrapper>
       <DropdownOption onClick={onMove}>Move</DropdownOption>
       {fieldsToMine.length > 0 &&
         fieldsToMine.map((field) => (
@@ -100,12 +116,13 @@ export const ShipToSpace: React.FC = () => {
             Mine {field.cp.asteroidSpawn.type}
           </DropdownOption>
         ))}
-      {entity.cp.deployable?.type === "facility" && (
-        <DropdownOption onClick={onFacilityDeploy}>
-          Deploy Facility
-        </DropdownOption>
-      )}
-    </>
+      {selected.length === 1 &&
+        selected[0].cp.deployable?.type === "facility" && (
+          <DropdownOption onClick={onFacilityDeploy}>
+            Deploy Facility
+          </DropdownOption>
+        )}
+    </Wrapper>
   );
 };
 

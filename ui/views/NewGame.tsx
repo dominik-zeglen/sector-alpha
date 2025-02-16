@@ -1,6 +1,7 @@
 import React from "react";
 import { Sim } from "@core/sim";
 import { createBaseConfig } from "@core/sim/baseConfig";
+import { assetLoader } from "@ogl-engine/AssetLoader";
 import { useLocation } from "../context/Location";
 import { View } from "../components/View";
 import { useSim } from "../atoms";
@@ -14,12 +15,13 @@ export const NewGame: React.FC = () => {
   React.useEffect(() => {
     async function load() {
       const data = await import("@core/world/data/base.json");
-      setProgress(0.5);
+      setProgress(0.2);
       sim.current = Sim.load(
         await createBaseConfig(),
         JSON.stringify(data.default)
       );
       setSim(sim.current);
+      await assetLoader.preload((p) => setProgress(p / 2 + 0.2));
       navigate("game");
     }
     sim.current?.destroy();

@@ -1,4 +1,4 @@
-import { add, random, sum } from "mathjs";
+import { random, sum } from "mathjs";
 import map from "lodash/map";
 import {
   pipe,
@@ -12,6 +12,7 @@ import {
 import type { RequireComponent } from "@core/tsHelpers";
 import type { Collectible } from "@core/archetypes/collectible";
 import { createCollectible } from "@core/archetypes/collectible";
+import { fromPolar } from "@core/utils/misc";
 import {
   InsufficientStorage,
   InsufficientStorageSpace,
@@ -272,10 +273,9 @@ export function dumpCargo(
       collectibles.push(
         createCollectible(entity.sim, {
           position: {
-            coord: add(entity.cp.position!.coord, [
-              random(-0.25, 0.25),
-              random(-0.25, 0.25),
-            ]),
+            coord: fromPolar(random(0, Math.PI * 2), random(0, 0.25)).add(
+              entity.cp.position!.coord
+            ),
             sector: entity.cp.position!.sector,
           },
           storage: {

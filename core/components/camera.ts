@@ -1,6 +1,7 @@
+import type { Vec2 } from "ogl";
 import type { BaseComponent } from "./component";
 
 export interface Camera extends BaseComponent<"camera"> {
   zoom: number;
-  position: [number, number];
+  readonly position: Vec2;
 }

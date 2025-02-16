@@ -1,10 +1,12 @@
-import type { Position, Position2D } from "@core/components/position";
+import type { Position } from "@core/components/position";
 import { isDev } from "@core/settings";
 import type { RequireComponent } from "@core/tsHelpers";
 import { discriminate } from "@core/utils/maps";
 import shuffle from "lodash/shuffle";
-import { distance, add, random } from "mathjs";
+import { random } from "mathjs";
 import keyBy from "lodash/keyBy";
+import type { Vec2 } from "ogl";
+import { fromPolar } from "@core/utils/misc";
 import type { Facility } from "../../archetypes/facility";
 import { createFacilityName, createFacility } from "../../archetypes/facility";
 import { facilityModules } from "../../archetypes/facilityModule";
@@ -84,25 +86,22 @@ export function addStartingCommodities(facility: RequireComponent<"storage">) {
 function getSectorPosition(
   sector: Sector,
   radius?: number,
-  point?: Position2D
-): Position2D {
-  let position: Position2D;
+  point?: Vec2
+): Vec2 {
+  let position: Vec2;
   let isNearAnyFacility: boolean;
   const r = radius ?? -sectorSize / 20;
 
   do {
-    position = add(point ?? [0, 0], [
-      random(-r, r),
-      random(-r, r),
-    ]) as Position2D;
+    position = fromPolar(random(0, 2 * Math.PI), random(0, r));
+    if (point) {
+      position.add(point);
+    }
 
     isNearAnyFacility = sector.sim.index.facilities
       .get()
       .filter((facility) => facility.cp.position.sector === sector.id)
-      .some(
-        (facility) =>
-          (distance(facility.cp.position.coord, position) as number) < 10
-      );
+      .some((facility) => facility.cp.position.coord.distance(position) < 10);
   } while (isNearAnyFacility);
 
   return position;
@@ -121,10 +120,7 @@ export class FacilityPlanningSystem extends System<"plan"> {
     );
     const facility = createFacility(this.sim, {
       owner: faction,
-      position: [
-        random(-sectorSize / 20, sectorSize / 20),
-        random(-sectorSize / 20, sectorSize / 20),
-      ],
+      position: fromPolar(random(0, 2 * Math.PI), random(0, sectorSize / 20)),
       sector,
     });
     facility.cp.name.value = createFacilityName(facility, "Factory");
@@ -232,10 +228,10 @@ export class FacilityPlanningSystem extends System<"plan"> {
     for (const sector of this.sim.index.sectors.getIt()) {
       if (sector.cp.owner?.id !== faction.id) continue;
 
-      const position: Position2D = [
-        random(-sectorSize / 50, sectorSize / 50),
-        random(-sectorSize / 50, sectorSize / 50),
-      ];
+      const position = fromPolar(
+        random(0, 2 * Math.PI),
+        random(0, sectorSize / 50)
+      );
 
       const facility = createFacility(this.sim, {
         owner: faction,
@@ -271,10 +267,10 @@ export class FacilityPlanningSystem extends System<"plan"> {
     for (const sector of this.sim.index.sectors.getIt()) {
       if (sector.cp.owner?.id !== faction.id) continue;
 
-      const coord: Position2D = [
-        random(-sectorSize / 50, sectorSize / 50),
-        random(-sectorSize / 50, sectorSize / 50),
-      ];
+      const coord = fromPolar(
+        random(0, 2 * Math.PI),
+        random(0, sectorSize / 50)
+      );
 
       const hive = createFacilityFromTemplate("outpostHive", this.sim, {
         position: {

@@ -1,7 +1,7 @@
 import clsx from "clsx";
 import React from "react";
+import sounds from "@assets/ui/sounds";
 import styles from "./Checkbox.scss";
-import { defaultClickSound, popSound } from "./BaseButton";
 
 export const Checkbox: React.FC<
   React.DetailedHTMLProps<
@@ -17,13 +17,13 @@ export const Checkbox: React.FC<
       {...props}
       ref={ref}
       onClick={(event) => {
-        defaultClickSound.play();
+        sounds.click.play();
         if (onClick) {
           onClick(event);
         }
       }}
       onMouseEnter={(event) => {
-        popSound.play();
+        sounds.pop.play();
         if (onMouseEnter) {
           onMouseEnter(event);
         }

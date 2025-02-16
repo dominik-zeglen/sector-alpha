@@ -2,6 +2,7 @@ import type { Reward } from "@core/components/missions";
 import type { Sim } from "@core/sim";
 import { pickRandom } from "@core/utils/generators";
 import { first } from "@fxts/core";
+import { actionLoader } from "@core/actionLoader";
 import { System } from "../system";
 import type { MissionHandler } from "./types";
 import { rewards, missions } from "./mapping";
@@ -38,7 +39,7 @@ export class MissionSystem extends System<"generate" | "track"> {
 
     sim.hooks.phase.update.subscribe(this.constructor.name, this.exec);
 
-    this.sim.actions.register(
+    actionLoader.register(
       {
         name: "Generate mission",
         slug: "generate",

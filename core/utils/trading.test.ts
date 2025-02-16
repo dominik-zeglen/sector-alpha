@@ -23,10 +23,10 @@ import { dockShip } from "../systems/orderExecuting/dock";
 import { tradeOrder } from "../systems/orderExecuting/trade";
 import type { TradeAction } from "../components/orders";
 import type { RequireComponent } from "../tsHelpers";
-import { commodityPrices } from "./perCommodity";
 import { changeRelations } from "../components/relations";
 import { PathPlanningSystem } from "../systems/pathPlanning";
 import { OrderExecutingSystem } from "../systems/orderExecuting/orderExecuting";
+import { commodityPrices } from "../economy/utils";
 
 describe("Trading module", () => {
   let sim: Sim;

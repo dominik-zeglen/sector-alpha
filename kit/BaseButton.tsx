@@ -1,7 +1,7 @@
 import React from "react";
-import { Howl } from "howler";
-import click from "@assets/ui/sounds/click.wav";
-import pop from "@assets/ui/sounds/pop.wav";
+import { useGameSettings } from "@ui/hooks/useGameSettings";
+import type { Howl } from "howler";
+import sounds from "@assets/ui/sounds";
 
 export type BaseButtonProps = React.DetailedHTMLProps<
   React.ButtonHTMLAttributes<HTMLButtonElement>,
@@ -11,23 +11,14 @@ export type BaseButtonProps = React.DetailedHTMLProps<
   enterSound?: Howl;
 };
 
-export const defaultClickSound = new Howl({
-  src: click,
-  volume: 0.2,
-});
-
-export const popSound = new Howl({
-  src: pop,
-  volume: 0.2,
-});
-
 export const BaseButton: React.FC<BaseButtonProps> = ({
   onClick,
   onMouseEnter,
-  clickSound,
+  clickSound: clickSoundProp,
   enterSound,
   ...props
 }) => {
+  const [settings] = useGameSettings();
   const ref = React.useRef<HTMLButtonElement>(null);
 
   return (
@@ -36,13 +27,17 @@ export const BaseButton: React.FC<BaseButtonProps> = ({
       {...props}
       ref={ref}
       onClick={(event) => {
-        (clickSound ?? defaultClickSound).play();
-        if (onClick) {
-          onClick(event);
-        }
+        const sound = clickSoundProp ?? sounds.click;
+        sound.volume(settings.volume.ui);
+        sound.play();
+
+        onClick?.(event);
       }}
       onMouseEnter={(event) => {
-        (enterSound ?? popSound).play();
+        const sound = enterSound ?? sounds.pop;
+        sound.volume(settings.volume.ui);
+        sound.play();
+
         if (onMouseEnter) {
           onMouseEnter(event);
         }

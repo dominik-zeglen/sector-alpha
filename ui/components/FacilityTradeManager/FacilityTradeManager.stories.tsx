@@ -2,7 +2,7 @@ import React from "react";
 import type { StoryFn, Meta } from "@storybook/react";
 import { Styles } from "@kit/theming/style";
 import { createTrade } from "@core/components/trade";
-import { commodityPrices } from "@core/utils/perCommodity";
+import { commodityPrices } from "@core/economy/utils";
 import { FacilityTradeManagerComponent } from "./FacilityTradeManagerComponent";
 
 export default {

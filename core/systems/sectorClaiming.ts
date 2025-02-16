@@ -46,7 +46,6 @@ export class SectorClaimingSystem extends System<"exec"> {
           );
           if (!hubOrHive) {
             sector.removeComponent("owner");
-            sector.cp.renderGraphics.redraw = true;
             return;
           }
         } else {
@@ -56,7 +55,6 @@ export class SectorClaimingSystem extends System<"exec"> {
 
           if (hubOrHive) {
             sector.addComponent({ name: "owner", id: hubOrHive.cp.owner.id });
-            sector.cp.renderGraphics.redraw = true;
           }
         }
       }

@@ -1,7 +1,6 @@
 import { filter, map, pipe, sort, toArray } from "@fxts/core";
 import type { Faction } from "@core/archetypes/faction";
 import { relationThresholds } from "@core/components/relations";
-import { distance } from "mathjs";
 import type { RequireComponent } from "@core/tsHelpers";
 import { pickRandom } from "@core/utils/generators";
 import { System } from "../system";
@@ -35,7 +34,7 @@ export class SpottingSystem extends System<"exec"> {
     const cacheKey = [
       entity.cp.owner!.id,
       entity.cp.position.sector,
-      entity.cp.orders?.value[0].type === "pillage" ? "pillage" : "default",
+      entity.cp.orders?.value[0]?.type === "pillage" ? "pillage" : "default",
     ].join(":");
     const enemies =
       cache[cacheKey] ??
@@ -45,7 +44,7 @@ export class SpottingSystem extends System<"exec"> {
           const isMiningOnRestrictedArea =
             entityOwner.cp.ai?.restrictions.mining && e.cp.mining?.entityId;
           const isSubjectToPillaging =
-            entity.cp.orders?.value[0].type === "pillage" &&
+            entity.cp.orders?.value[0]?.type === "pillage" &&
             entityOwner.cp.relations.values[e.cp.owner.id]! <= 0 &&
             (e.tags.has("role:transport") || e.tags.has("role:mining")) &&
             (e.cp.dockable?.size === "small" ||
@@ -69,10 +68,7 @@ export class SpottingSystem extends System<"exec"> {
       enemies,
       map((e) => ({
         entity: e,
-        distance: distance(
-          e.cp.position.coord,
-          entity.cp.position.coord
-        ) as number,
+        distance: e.cp.position.coord.distance(entity.cp.position.coord),
       })),
       sort((a, b) => (a.distance > b.distance ? 1 : -1)),
       toArray

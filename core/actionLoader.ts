@@ -4,7 +4,7 @@ import { isHeadless } from "./settings";
 import type { Sim } from "./sim";
 
 export class ActionLoader {
-  private sim: Sim;
+  private sim: Sim | null;
   private actions: Array<
     DevAction & {
       /**
@@ -14,8 +14,7 @@ export class ActionLoader {
     }
   >;
 
-  constructor(sim: Sim) {
-    this.sim = sim;
+  constructor() {
     this.actions = [];
 
     if (!isHeadless) {
@@ -29,6 +28,16 @@ export class ActionLoader {
 
   all() {
     return this.actions;
+  }
+
+  link(sim: Sim) {
+    this.sim = sim;
+  }
+
+  reset() {
+    this.actions = [];
+    this.sim = null;
+    window.cheats = undefined!;
   }
 
   register(action: DevAction, origin: string) {
@@ -45,6 +54,7 @@ export class ActionLoader {
     }
     this.actions.push({ ...action, origin });
     if (!isHeadless) {
+      window.cheats ??= {};
       if (!window.cheats[action.category]) {
         window.cheats[action.category] = {};
       }
@@ -55,3 +65,5 @@ export class ActionLoader {
     }
   }
 }
+
+export const actionLoader = new ActionLoader();

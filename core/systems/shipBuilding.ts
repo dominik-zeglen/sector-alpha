@@ -26,7 +26,7 @@ export class ShipBuildingSystem extends System<"exec"> {
         if (shipyard.cp.shipyard.building) {
           const ship = createShip(this.sim, {
             ...shipyard.cp.shipyard.building.blueprint,
-            position: [...shipyard.cp.position.coord],
+            position: shipyard.cp.position.coord.clone(),
             sector: this.sim.getOrThrow<Sector>(shipyard.cp.position.sector),
             owner: this.sim.getOrThrow<Faction>(
               shipyard.cp.shipyard.building.owner

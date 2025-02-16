@@ -1,0 +1,13 @@
+diff --git a/node_modules/glsl-tokenizer/index.js b/node_modules/glsl-tokenizer/index.js
+index f73f1f6..45d0b44 100644
+--- a/node_modules/glsl-tokenizer/index.js
++++ b/node_modules/glsl-tokenizer/index.js
+@@ -54,7 +54,7 @@ function tokenize(opt) {
+     , input = ''
+     , len
+ 
+-  opt = opt || {}
++  opt = opt || { version: '300 es'}
+   var allBuiltins = builtins100
+   var allLiterals = literals100
+   if (opt.version === '300 es') {

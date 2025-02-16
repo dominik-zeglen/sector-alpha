@@ -6,8 +6,9 @@ import type { Sim } from "@core/sim";
 import type { Ship } from "@core/archetypes/ship";
 import { createShip } from "@core/archetypes/ship";
 import type { Sector } from "@core/archetypes/sector";
-import { distance, random } from "mathjs";
+import { random } from "mathjs";
 import type { FacilityModule } from "@core/archetypes/facilityModule";
+import { fromPolar } from "@core/utils/misc";
 import conversation from "../../../../world/data/missions/main/ffw/tutorial-escort.yml";
 import type { MissionHandler } from "../../types";
 
@@ -59,10 +60,9 @@ export const mainFfwTutorialEscortMissionHandler: MissionHandler = {
     const escort = createShip(sim, {
       ...shipClasses.find(({ slug }) => slug === "dart")!,
       angle: 0,
-      position: [
-        hub.cp.position.coord[0] + random(-0.1, 0.1),
-        hub.cp.position.coord[1] + random(-0.1, 0.1),
-      ],
+      position: fromPolar(random(0, 2 * Math.PI), random(0, 0.1)).add(
+        hub.cp.position.coord
+      ),
       owner: player,
       sector: sim.getOrThrow<Sector>(miner.cp.position.sector),
     });
@@ -101,8 +101,7 @@ export const mainFfwTutorialEscortMissionHandler: MissionHandler = {
       fighter.cp.orders.value[0]?.type === "escort" &&
       fighter.cp.orders.value[0].targetId === mission.minerId &&
       fighter.cp.position.sector === miner.cp.position.sector &&
-      (distance(fighter.cp.position.coord, miner.cp.position.coord) as number) <
-        2
+      fighter.cp.position.coord.distance(miner.cp.position.coord) < 2
     );
   },
   update: (mission: Mission, _sim: Sim) => {

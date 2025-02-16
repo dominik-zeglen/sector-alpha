@@ -4,6 +4,7 @@ import type { Sim } from "@core/sim";
 import { moveToActions } from "@core/utils/moving";
 import { each, filter, first, map, pipe, sortBy } from "@fxts/core";
 import { random } from "mathjs";
+import { fromPolar } from "@core/utils/misc";
 import { System } from "../system";
 
 /**
@@ -59,7 +60,7 @@ export class ShipReturningSystem extends System<"exec"> {
               createWaypoint(this.sim, {
                 sector: closestSector.id,
                 owner: ship.id,
-                value: [random(-5, 5), random(-5, 5)],
+                value: fromPolar(random(0, Math.PI * 2), random(0, 5)),
               })
             ),
             origin: "auto",

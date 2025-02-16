@@ -5,7 +5,6 @@ import { find, first } from "@fxts/core";
 import type { Sim } from "@core/sim";
 import { createShip } from "@core/archetypes/ship";
 import type { Sector } from "@core/archetypes/sector";
-import { add } from "mathjs";
 import { fromPolar } from "@core/utils/misc";
 import conversation from "../../../../world/data/missions/main/ffw/tutorial-pirates.yml";
 import endConversation from "../../../../world/data/missions/main/ffw/tutorial-end.yml";
@@ -58,9 +57,8 @@ export const mainFfwTutorialPiratesMissionHandler: MissionHandler = {
         createShip(sim, {
           ...shipClasses.find(({ slug }) => slug === "roach")!,
           angle: Math.random() * Math.PI * 2,
-          position: add(
-            miner.cp.position.coord,
-            fromPolar(Math.random() * Math.PI * 2, 10)
+          position: fromPolar(Math.random() * Math.PI * 2, 10).add(
+            miner.cp.position.coord
           ),
           owner: pirateFaction,
           sector: sim.getOrThrow<Sector>(miner.cp.position.sector),

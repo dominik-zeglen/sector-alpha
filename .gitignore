@@ -11,3 +11,5 @@
 dist
 node_modules
 TODO
+*.bundled.*
+storybook-static

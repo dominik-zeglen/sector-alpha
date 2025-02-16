@@ -1,6 +1,6 @@
 import React from "react";
 import type { StoryFn, Meta } from "@storybook/react";
-import { Styles } from "@kit/theming/style";
+import { Styles, usesize } from "@kit/theming/style";
 import { action } from "@storybook/addon-actions";
 import { MissionsOverlayComponent as MissionsOverlay } from "./MissionsOverlayComponent";
 import type { MissionsOverlayComponentProps } from "./MissionsOverlayComponent";
@@ -17,7 +17,7 @@ export default {
 const Template: StoryFn<typeof MissionsOverlay> = (args) => (
   <div id="root">
     <Styles>
-      <div style={{ padding: "usesize(4)" }}>
+      <div style={{ padding: usesize(4) }}>
         <MissionsOverlay {...args} />
       </div>
     </Styles>

@@ -1,11 +1,12 @@
-const path = require("path");
-const HtmlWebpackPlugin = require("html-webpack-plugin");
-const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
-const TsconfigPathsPlugin = require("tsconfig-paths-webpack-plugin");
-const { EnvironmentPlugin } = require("webpack");
-const { BugsnagSourceMapUploaderPlugin } = require("webpack-bugsnag-plugins");
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-const packageJson = require("./package.json");
+import path from "path";
+import HtmlWebpackPlugin from "html-webpack-plugin";
+import ForkTsCheckerWebpackPlugin from "fork-ts-checker-webpack-plugin";
+import TsconfigPathsPlugin from "tsconfig-paths-webpack-plugin";
+import { EnvironmentPlugin } from "webpack";
+import { BugsnagSourceMapUploaderPlugin } from "webpack-bugsnag-plugins";
+import MiniCssExtractPlugin from "mini-css-extract-plugin";
+import CircularDependencyPlugin from "circular-dependency-plugin";
+import packageJson from "./package.json";
 
 const devMode = process.env.NODE_ENV !== "production";
 
@@ -19,10 +20,16 @@ const plugins = [
     NODE_ENV: "development",
     BUGSNAG_API_KEY: "",
     BUILD_ENV: "local",
+    STORYBOOK: false,
   }),
   new MiniCssExtractPlugin({
     filename: devMode ? "[name].css" : "[name].[contenthash].css",
     chunkFilename: devMode ? "[id].css" : "[id].[contenthash].css",
+  }),
+  new CircularDependencyPlugin({
+    failOnError: false,
+    allowAsyncCycles: false,
+    cwd: process.cwd(),
   }),
 ];
 
@@ -102,8 +109,12 @@ const config = {
         use: ["./build/conversation-loader.ts"],
       },
       {
-        test: /\.(svg|png|jpe?g|wav)$/,
+        test: /\.(svg|png|jpe?g|wav|glb)$/,
         type: "asset/resource",
+      },
+      {
+        test: /\.glsl$/,
+        use: ["./build/shader-loader.ts"],
       },
     ],
   },
@@ -111,6 +122,9 @@ const config = {
     path: path.resolve(__dirname, "dist"),
     publicPath: "/",
     filename: "bundle.[hash].js",
+    assetModuleFilename: devMode
+      ? "[path][name][ext][query]"
+      : "assets/[hash][ext][query]",
   },
   plugins,
   devServer: {
@@ -136,4 +150,4 @@ const config = {
   devtool: "source-map",
 };
 
-module.exports = config;
+export default config;

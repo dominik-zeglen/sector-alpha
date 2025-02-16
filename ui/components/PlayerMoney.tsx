@@ -3,13 +3,13 @@ import React from "react";
 import Stack from "@kit/Stack";
 import { useGameSettings } from "@ui/hooks/useGameSettings";
 import { ConfigIcon, FleetIcon, JournalIcon, LockIcon } from "@assets/ui/icons";
-import { useGameDialog, useGameOverlay, useSim } from "../atoms";
+import { gameStore } from "@ui/state/game";
+import { useGameDialog, useSim } from "../atoms";
 import styles from "./PlayerMoney.scss";
 
 export const PlayerMoney: React.FC = () => {
   const [sim] = useSim();
   const [player, setPlayer] = React.useState(sim.index.player.get()[0]);
-  const [, setOverlay] = useGameOverlay();
   const [gameSettings] = useGameSettings();
   const [, setDialog] = useGameDialog();
 
@@ -27,17 +27,20 @@ export const PlayerMoney: React.FC = () => {
       <span className={styles.money}>
         {player.cp.budget!.available.toFixed(0)} UTT
       </span>
-      <IconButton variant="naked" onClick={() => setOverlay("fleet")}>
+      <IconButton variant="naked" onClick={() => gameStore.setOverlay("fleet")}>
         <FleetIcon />
       </IconButton>
-      <IconButton variant="naked" onClick={() => setOverlay("missions")}>
+      <IconButton
+        variant="naked"
+        onClick={() => gameStore.setOverlay("missions")}
+      >
         <JournalIcon />
       </IconButton>
       {gameSettings.dev && (
         <IconButton
           className={styles.dev}
           variant="naked"
-          onClick={() => setOverlay("dev")}
+          onClick={() => gameStore.setOverlay("dev")}
         >
           <LockIcon />
         </IconButton>

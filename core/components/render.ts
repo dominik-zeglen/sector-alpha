@@ -1,4 +1,5 @@
 import type { manifest } from "@assets/icons";
+import type { ModelName } from "@ogl-engine/AssetLoader";
 import type { BaseComponent } from "./component";
 
 export type Textures = (typeof manifest)["frames"];
@@ -20,6 +21,7 @@ export interface Render extends BaseComponent<"render"> {
   color: number;
   defaultScale: number;
   texture: keyof Textures;
+  model: ModelName;
   layer: Layer;
   name: "render";
   /**
@@ -51,6 +53,8 @@ export function createRender({
     name: "render",
     layer,
     texture,
+    // @ts-expect-error
+    model: "",
     hidden: 0,
     static: false,
     interactive: false,

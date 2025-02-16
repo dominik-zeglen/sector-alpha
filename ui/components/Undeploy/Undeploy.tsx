@@ -6,11 +6,12 @@ import { Button } from "@kit/Button";
 import clsx from "clsx";
 import { isOwnedByPlayer } from "@core/utils/misc";
 import { RedoIcon } from "@assets/ui/icons";
+import { gameStore } from "@ui/state/game";
 import styles from "./Undeploy.scss";
 
 export interface UndeployProps {
   facility: Entity | undefined;
-  deployable: RequireComponent<"deployable">;
+  deployable: RequireComponent<"deployable" | "position">;
 }
 
 export const Undeploy: React.FC<UndeployProps> = ({ facility, deployable }) => {
@@ -27,12 +28,8 @@ export const Undeploy: React.FC<UndeployProps> = ({ facility, deployable }) => {
             <IconButton
               className={styles.btn}
               onClick={() => {
-                const { selectionManager } = deployable.sim
-                  .find((e) => e.hasComponents(["selectionManager"]))!
-                  .requireComponents(["selectionManager"]).cp;
-
-                selectionManager.id = facility.id;
-                selectionManager.focused = true;
+                gameStore.setSelectedUnits([deployable]);
+                gameStore.focus();
               }}
             >
               <RedoIcon />

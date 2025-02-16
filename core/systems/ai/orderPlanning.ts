@@ -1,10 +1,9 @@
 import type { Faction } from "@core/archetypes/faction";
 import { relationThresholds } from "@core/components/relations";
-import { minBy } from "lodash";
-import { add, norm, random, subtract, distance } from "mathjs";
+import minBy from "lodash/minBy";
+import { random } from "mathjs";
 import { filter, flatMap, map, pipe, sum, toArray } from "@fxts/core";
-import type { Position2D } from "@core/components/position";
-import { getRandomPositionInBounds } from "@core/utils/misc";
+import { fromPolar, getRandomPositionInBounds } from "@core/utils/misc";
 import { hecsToCartesian } from "@core/components/hecsPosition";
 import { asteroidField } from "../../archetypes/asteroidField";
 import { commanderRange, facility } from "../../archetypes/facility";
@@ -64,10 +63,9 @@ function idleMovement(entity: RequireComponent<"position" | "orders">) {
         commander
           ? {
               sector: commander.cp.position.sector,
-              value: add(commander.cp.position.coord, [
-                random(-1, 1),
-                random(-1, 1),
-              ]) as Position2D,
+              value: fromPolar(random(0, 2 * Math.PI), random(0, 1)).add(
+                commander.cp.position.coord
+              ),
               owner: entity.id,
             }
           : {
@@ -256,20 +254,15 @@ function autoMine(
       toArray
     );
     const field = minBy(eligibleFields, (e) =>
-      distance(
-        add(
-          hecsToCartesian(currentSector.cp.hecsPosition.value, sectorSize),
-          entity.cp.position.coord
-        ),
-        add(
+      hecsToCartesian(currentSector.cp.hecsPosition.value, sectorSize)
+        .add(entity.cp.position.coord)
+        .squaredDistance(
           hecsToCartesian(
             entity.sim.getOrThrow<Sector>(e.cp.position.sector).cp.hecsPosition
               .value,
             sectorSize
-          ),
-          e.cp.position.coord
+          ).add(e.cp.position.coord)
         )
-      )
     );
 
     if (!field) {
@@ -354,9 +347,7 @@ function autoMineForCommander(
         toArray
       );
       const field = minBy(eligibleFields, (e) =>
-        norm(
-          subtract(entity.cp.position.coord, e.cp.position.coord) as Position2D
-        )
+        entity.cp.position.coord.distance(e.cp.position.coord)
       );
 
       if (!field) {

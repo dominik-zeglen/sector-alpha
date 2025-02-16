@@ -1,6 +1,7 @@
 import { random, randomInt } from "mathjs";
+import { commodityPrices } from "@core/economy/utils";
 import type { Commodity } from "../economy/commodity";
-import { commodityPrices, perCommodity } from "../utils/perCommodity";
+import { perCommodity } from "../utils/perCommodity";
 import type { BaseComponent } from "./component";
 
 export type PriceBelief = [number, number];

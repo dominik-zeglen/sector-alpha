@@ -1,12 +1,12 @@
 import type { TradeOffers } from "@core/components/trade";
 import { commodityLabel } from "@core/economy/commodity";
-import { commodityPrices } from "@core/utils/perCommodity";
 import { Button } from "@kit/Button";
 import { Checkbox } from "@kit/Checkbox";
 import { Dialog } from "@kit/Dialog";
 import { DialogActions } from "@kit/DialogActions";
 import { Slider } from "@kit/Slider";
 import React from "react";
+import { commodityPrices } from "@core/economy/utils";
 import type { ModalProps } from "../ConfigDialog";
 import styles from "./FacilityTradeManager.scss";
 

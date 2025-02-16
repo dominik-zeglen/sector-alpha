@@ -1,5 +1,5 @@
 import Color from "color";
-import type { Position2D } from "@core/components/position";
+import type { Vec2 } from "ogl";
 import { createBudget } from "../components/budget";
 import { Entity } from "../entity";
 import { createRender } from "../components/render";
@@ -35,7 +35,7 @@ export function facility(entity: Entity): Facility {
 }
 
 export interface InitialFacilityInput {
-  position: Position2D;
+  position: Vec2;
   owner: Faction;
   sector: Sector;
 }
@@ -87,7 +87,6 @@ export function createFacility(sim: Sim, initial: InitialFacilityInput) {
     .addComponent({ name: "journal", entries: [] })
     .addComponent({
       name: "hitpoints",
-      g: { hp: null!, shield: null! },
       hp: { max: 100000, regen: 0, value: 100000 },
     })
     .addComponent({

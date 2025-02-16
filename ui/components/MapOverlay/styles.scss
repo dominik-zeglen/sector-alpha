@@ -1,0 +1,23 @@
+.root {
+  height: 100%;
+  position: relative;
+}
+
+.sector {
+  position: absolute;
+  top: usesize(20);
+  left: usesize(4);
+  background-color: #0d1b2a;
+  border-radius: usesize(0.4);
+  width: usesize(26);
+  padding: usesize(1);
+
+  &Header {
+    text-align: center;
+    margin-bottom: usesize(2.4);
+  }
+
+  &Enter {
+    width: 100%;
+  }
+}

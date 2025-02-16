@@ -5,6 +5,7 @@ import { find, first } from "@fxts/core";
 import { createShip } from "@core/archetypes/ship";
 import { shipClasses } from "@core/world/ships";
 import type { Sim } from "@core/sim";
+import { fromPolar } from "@core/utils/misc";
 import type { MissionHandler } from "../../types";
 import conversation from "../../../../world/data/missions/main/ffw/tutorial-miner.yml";
 import type { MissionReward } from "../../rewards";
@@ -52,7 +53,7 @@ export const mainFfwTutorialMinerMissionHandler: MissionHandler = {
     const miner = createShip(sim, {
       ...shipClasses.find(({ slug }) => slug === "smallMinerA")!,
       angle: random(-Math.PI, Math.PI),
-      position: [random(-1, 1), random(-1, 1)],
+      position: fromPolar(random(-Math.PI, Math.PI), random(0, 1)),
       owner: player,
       sector,
     });

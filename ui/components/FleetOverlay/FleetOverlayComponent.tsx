@@ -16,7 +16,7 @@ export interface Fleet {
 export interface FleetOverlayComponentProps {
   fleets: Fleet[];
   unassigned: Ship[];
-  selected: number | undefined;
+  selected: number[];
   onContextMenu: (
     _id: number,
     _event: React.MouseEvent<HTMLButtonElement>
@@ -29,22 +29,19 @@ function isFleet(value: Fleet | Ship): value is Fleet {
   return (value as Fleet).subordinates !== undefined;
 }
 
-function hasSelectedSubordinate(
-  fleet: Fleet,
-  selected: number | undefined
-): boolean {
+function hasSelectedSubordinate(fleet: Fleet, selected: number[]): boolean {
   return fleet.subordinates.some((subordinate) =>
     isFleet(subordinate)
       ? hasSelectedSubordinate(subordinate, selected) ||
-        subordinate.commander.id === selected
-      : subordinate.id === selected
+        selected.includes(subordinate.commander.id)
+      : selected.includes(subordinate.id)
   );
 }
 
 interface FleetComponentProps {
   fleet: Fleet;
   level?: number;
-  selected: number | undefined;
+  selected: number[];
   onSelect: (_id: number) => void;
   onFocus: () => void;
   onContextMenu: (
@@ -80,7 +77,7 @@ const FleetComponent: React.FC<FleetComponentProps> = ({
         <ShipButton
           key={fleet.commander.id}
           ship={fleet.commander}
-          selected={selected}
+          selected={selected.includes(fleet.commander.id)}
           onFocus={onFocus}
           onSelect={onSelect}
           onContextMenu={onContextMenu}
@@ -124,7 +121,7 @@ const FleetComponent: React.FC<FleetComponentProps> = ({
                   className={styles.shipMargin}
                   key={subordinate.id}
                   ship={subordinate}
-                  selected={selected}
+                  selected={selected.includes(subordinate.id)}
                   onFocus={onFocus}
                   onSelect={onSelect}
                   onContextMenu={onContextMenu}
@@ -174,7 +171,7 @@ export const FleetOverlayComponent: React.FC<FleetOverlayComponentProps> = ({
               <ShipButton
                 key={ship.id}
                 ship={ship}
-                selected={selected}
+                selected={selected.includes(ship.id)}
                 onFocus={onFocus}
                 onSelect={onSelect}
                 onContextMenu={onContextMenu}

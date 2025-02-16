@@ -1,21 +1,12 @@
+import { Vec2 } from "ogl";
 import type { PositionHex } from "./hecsPosition";
 import { hecsDistance, worldToHecs } from "./hecsPosition";
-import type { Position2D } from "./position";
 
 describe("worldToHecs", () => {
-  const testCases: [Position2D, PositionHex][] = [
-    [
-      [0, 0],
-      [0, 0, 0],
-    ],
-    [
-      [90, -55],
-      [1, -1, 0],
-    ],
-    [
-      [78, -162],
-      [1, -2, 1],
-    ],
+  const testCases: [Vec2, PositionHex][] = [
+    [new Vec2(0, 0), [0, 0, 0]],
+    [new Vec2(90, -55), [1, -1, 0]],
+    [new Vec2(78, -162), [1, -2, 1]],
   ];
 
   test.each(testCases)(

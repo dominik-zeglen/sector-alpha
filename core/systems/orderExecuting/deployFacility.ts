@@ -8,8 +8,11 @@ import { createRender } from "@core/components/render";
 import { createCommodityStorage } from "@core/components/storage";
 import { createTrade } from "@core/components/trade";
 import { addFacilityModule } from "@core/utils/entityModules";
+import { transport3D } from "../transport3d";
 
 export function deployFacilityAction(entity: Ship): boolean {
+  transport3D.hooks.deployFacility.notify(entity);
+
   const render = createRender({
     ...entity.cp.render,
     defaultScale: 1,

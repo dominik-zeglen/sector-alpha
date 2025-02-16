@@ -8,8 +8,18 @@
   top: 0;
   display: none;
 
-  &.active {
+  &.active,
+  &.fadeIn,
+  &.fadeOut {
     display: block;
+  }
+
+  &.fadeIn {
+    animation: fadeIn 150ms ease-in-out;
+  }
+
+  &.fadeOut {
+    animation: fadeOut 150ms ease-in-out;
   }
 }
 
@@ -29,7 +39,7 @@
 
     &:after {
       display: block;
-      height: 1rem;
+      height: usesize(1.5);
       width: usesize(0.1);
       background-color: var(--palette-border);
       position: absolute;
@@ -45,5 +55,25 @@
   h1:after {
     height: 1.5rem;
     top: usesize(0.8);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
   }
 }

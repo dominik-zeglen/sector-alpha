@@ -1,7 +1,7 @@
 import { add, matrix, multiply, subtract, sum } from "mathjs";
+import { Vec2 } from "ogl";
 import { sectorSize } from "../archetypes/sector";
 import type { BaseComponent } from "./component";
-import type { Position2D } from "./position";
 
 export const transforms = {
   s: [0, 1, -1],
@@ -59,28 +59,24 @@ export function hecsRound(position: PositionHex): PositionHex {
   return rounded;
 }
 
-export function hecsToCartesian(
-  position: PositionHex,
-  scale: number
-): Position2D {
+export function hecsToCartesian(position: PositionHex, scale: number): Vec2 {
   if (position.length !== 3) throw new Error("Invalid position");
 
-  return multiply(
-    multiply(
-      matrix([
-        [3 / 2, 0],
-        [Math.sqrt(3) / 2, Math.sqrt(3)],
-      ]),
-      matrix(position).clone().resize([2])
-    ),
-    scale
-  ).toArray() as Position2D;
+  return new Vec2(
+    ...(multiply(
+      multiply(
+        matrix([
+          [3 / 2, 0],
+          [Math.sqrt(3) / 2, Math.sqrt(3)],
+        ]),
+        matrix(position).clone().resize([2])
+      ),
+      scale
+    ).toArray() as number[])
+  );
 }
 
-export function cartesianToHecs(
-  position: Position2D,
-  scale: number
-): PositionHex {
+export function cartesianToHecs(position: Vec2, scale: number): PositionHex {
   return axialToCube(
     multiply(
       multiply(
@@ -95,6 +91,6 @@ export function cartesianToHecs(
   );
 }
 
-export function worldToHecs(coords: Position2D): PositionHex {
+export function worldToHecs(coords: Vec2): PositionHex {
   return hecsRound(cartesianToHecs(coords, 10 / sectorSize));
 }

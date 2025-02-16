@@ -100,6 +100,14 @@ export class SectorIndex<
     return this.sectors[sectorId] ? [...this.sectors[sectorId]] : [];
   };
 
+  getIt = (sectorId: number): IterableIterator<RequireComponent<T>> => {
+    if (!this.sim) {
+      throw new IndexNotAppliedError();
+    }
+
+    return (this.sectors[sectorId] ?? []).values();
+  };
+
   getSectors = () => {
     if (!this.sim) {
       throw new IndexNotAppliedError();

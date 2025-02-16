@@ -1,10 +1,12 @@
 import custom from "../webpack.config.ts";
+import HtmlWebpackPlugin from "html-webpack-plugin";
 
 module.exports = {
   stories: [
     "../stories/**/*.stories.mdx",
     "../stories/**/*.stories.@(js|jsx|ts|tsx)",
     "../ui/**/*.stories.tsx",
+    "../ogl-engine/**/*.stories.tsx",
   ],
   addons: [
     "@storybook/addon-links",
@@ -20,6 +22,7 @@ module.exports = {
       ...config,
       module: {
         ...config.module,
+
         rules: [
           ...config.module.rules.filter(({ test }) =>
             test ? !test.toString().includes(".css") : true
@@ -31,7 +34,12 @@ module.exports = {
         ...config.resolve,
         plugins: custom.resolve.plugins,
       },
-      plugins: [...config.plugins, ...custom.plugins],
+      plugins: [
+        ...config.plugins,
+        ...custom.plugins.filter(
+          (plugin) => !(plugin instanceof HtmlWebpackPlugin)
+        ),
+      ],
     };
   },
 };

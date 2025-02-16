@@ -15,8 +15,8 @@
 
   svg {
     margin-left: usesize(0.8);
-    width: 1rem;
-    height: 1rem;
+    width: usesize(1.5);
+    height: usesize(1.5);
   }
 }
 .summary {

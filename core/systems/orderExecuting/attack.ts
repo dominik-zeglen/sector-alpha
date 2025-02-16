@@ -6,7 +6,9 @@ import type {
 } from "@core/components/orders";
 import type { RequireComponent } from "@core/tsHelpers";
 import { clearTarget, moveToActions, setTarget } from "@core/utils/moving";
-import { isInDistance } from "../attacking";
+import { filter, first, pipe, sort } from "@fxts/core";
+import { isInDistance, isInRange } from "../attacking";
+import { defaultIndexer } from "../utils/default";
 
 type OffensiveEntity = RequireComponent<
   "drive" | "movable" | "position" | "orders" | "damage"
@@ -18,7 +20,7 @@ export function attackOrder(entity: OffensiveEntity, group: AttackOrder) {
   const target = entity.sim.getOrThrow<Waypoint>(group.targetId);
   const moveOrders = group.actions.filter((o) => o.type === "move");
   const lastMoveOrder = moveOrders.at(-1) as MoveAction;
-  const isInRange = isInDistance(entity, target);
+  const inRange = isInDistance(entity, target);
 
   const shouldRecreateOrders = lastMoveOrder
     ? target.cp.position.sector !== group.ordersForSector
@@ -26,7 +28,7 @@ export function attackOrder(entity: OffensiveEntity, group: AttackOrder) {
 
   if (shouldRecreateOrders) {
     group.actions = [
-      ...(isInRange ? [] : moveToActions(entity, target)),
+      ...(inRange ? [] : moveToActions(entity, target)),
       { type: "attack", targetId: target.id },
     ];
     group.ordersForSector = target.cp.position.sector;
@@ -63,6 +65,27 @@ export function attackAction(
   >,
   action: AttackAction
 ): boolean {
+  if (
+    entity.tags.has("role:military") &&
+    entity.cp.dockable?.size === "small" &&
+    (entity.cp.orders.value[0].type !== "attack" ||
+      entity.cp.orders.value[0].origin === "auto")
+  ) {
+    const potentialTarget = pipe(
+      defaultIndexer.sectorShips.getIt(entity.cp.position.sector),
+      filter((s) => isInRange(entity, s)),
+      sort(
+        (a, b) =>
+          entity.cp.position.coord.squaredDistance(a.cp.position.coord) -
+          entity.cp.position.coord.squaredDistance(b.cp.position.coord)
+      ),
+      first
+    );
+    if (potentialTarget) {
+      action.targetId = potentialTarget.id;
+    }
+  }
+
   const target = entity.sim.getOrThrow<Waypoint>(action.targetId);
   setTarget(entity, action.targetId);
 

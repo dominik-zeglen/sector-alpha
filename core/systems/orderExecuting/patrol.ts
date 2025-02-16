@@ -1,10 +1,9 @@
 import { createWaypoint } from "@core/archetypes/waypoint";
 import { sectorSize } from "@core/archetypes/sector";
 import type { Sector } from "@core/archetypes/sector";
-import { random } from "lodash";
-import { randomInt } from "mathjs";
-import type { Position2D } from "@core/components/position";
+import { random, randomInt } from "mathjs";
 import { fromPolar } from "@core/utils/misc";
+import type { Vec2 } from "ogl";
 import type { PatrolOrder } from "../../components/orders";
 import type { RequireComponent } from "../../tsHelpers";
 import { moveToActions } from "../../utils/moving";
@@ -16,7 +15,7 @@ export function patrolOrder(
   const targetSector = entity.sim.getOrThrow<Sector>(order.sectorId);
 
   if (order.actions.length === 0) {
-    let waypointPosition: Position2D;
+    let waypointPosition: Vec2;
 
     if (entity.cp.position.sector === targetSector.id) {
       const pos = entity.cp.position.coord;
@@ -29,10 +28,10 @@ export function patrolOrder(
         random(sectorSize / 30, sectorSize / 15)
       );
     } else {
-      waypointPosition = [
-        random(-sectorSize / 20, sectorSize / 20),
-        random(-sectorSize / 20, sectorSize / 20),
-      ];
+      waypointPosition = fromPolar(
+        random(0, 2 * Math.PI),
+        random(sectorSize / 30, sectorSize / 15)
+      );
     }
 
     entity.cp.orders.value[0].actions = moveToActions(

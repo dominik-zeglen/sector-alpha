@@ -1,5 +1,4 @@
 import type { RequireComponent } from "@core/tsHelpers";
-import type { Graphics } from "pixi.js";
 import type { BaseComponent } from "./component";
 
 export interface HitPoints extends BaseComponent<"hitpoints"> {
@@ -14,10 +13,6 @@ export interface HitPoints extends BaseComponent<"hitpoints"> {
     regen: number;
   };
   hit?: boolean;
-  g: {
-    hp: Graphics;
-    shield: Graphics;
-  };
 }
 
 export function changeHp(

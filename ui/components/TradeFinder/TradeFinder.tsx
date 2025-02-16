@@ -13,6 +13,7 @@ import sortBy from "lodash/sortBy";
 import clsx from "clsx";
 import { relationThresholds } from "@core/components/relations";
 import { RedoIcon } from "@assets/ui/icons";
+import { useGameStore } from "@ui/state/game";
 import { useSim } from "../../atoms";
 import styles from "./TradeFinder.scss";
 
@@ -40,6 +41,7 @@ export const TradeFinder: React.FC = () => {
       ),
     [sim.index.trading.get()]
   );
+  const [, gameStore] = useGameStore(() => []);
 
   return (
     <>
@@ -79,9 +81,9 @@ export const TradeFinder: React.FC = () => {
                 <IconButton
                   variant="naked"
                   onClick={() => {
-                    sim.index.settings.get()[0].cp.selectionManager.id =
-                      entity.id;
+                    gameStore.setSelectedUnits([entity]);
                   }}
+                  onDoubleClick={gameStore.focus}
                 >
                   <RedoIcon />
                 </IconButton>

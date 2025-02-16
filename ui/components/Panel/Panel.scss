@@ -12,12 +12,11 @@
   border-bottom: none;
 }
 .root {
-  border: usesize(0.1) solid var(--palette-border);
-  border-left: none;
+  border-right: usesize(0.1) solid var(--palette-border);
   border-top-right-radius: usesize(0.8);
   border-bottom-right-radius: usesize(0.8);
-  background: var(--palette-background);
-  max-height: calc(100vh - usesize(12.8));
+  background: rgba(0, 0, 0, 0.1);
+  max-height: usesize(70);
   padding: usesize(2.4);
   position: absolute;
   top: usesize(6.4);
@@ -33,7 +32,7 @@
     display: none;
   }
   overflow-y: scroll;
-  height: calc(100vh - usesize(23.4));
+  height: calc(59 * var(--size));
   padding-bottom: usesize(2.4);
 }
 .rotate {

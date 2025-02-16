@@ -1,5 +1,5 @@
 import type { MineableCommodity } from "@core/economy/commodity";
-import type { Position2D } from "@core/components/position";
+import type { Vec2 } from "ogl";
 import { Entity } from "../entity";
 import type { Sim } from "../sim";
 import type { RequireComponent } from "../tsHelpers";
@@ -30,7 +30,7 @@ export function asteroid(entity: Entity): Asteroid {
 export function createAsteroid(
   sim: Sim,
   parent: AsteroidField,
-  position: Position2D,
+  position: Vec2,
   resources: number
 ) {
   const entity = new Entity(sim);

@@ -1,4 +1,4 @@
-type ObserverFn<T> = (_value: T) => void;
+export type ObserverFn<T> = (_value: T) => void;
 
 export class Observable<T> {
   /**
@@ -8,6 +8,8 @@ export class Observable<T> {
   name: string;
   observers: Map<ObserverFn<T>, string> = new Map();
   value: T;
+
+  onError: Array<(_err: Error) => void> = [];
 
   constructor(name: string, boundary = true) {
     this.name = name;
@@ -32,6 +34,9 @@ export class Observable<T> {
         } catch (err) {
           // eslint-disable-next-line no-console
           console.error(`Error in observer ${this.name} calling for ${origin}`);
+          for (const onError of this.onError) {
+            onError(err);
+          }
           throw err;
         }
       } else {

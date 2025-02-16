@@ -1,32 +1,36 @@
 import React from "react";
-import { getSelected } from "@core/components/selection";
 import Text from "@kit/Text";
-import { useSim } from "../../atoms";
+import { useGameStore } from "@ui/state/game";
 import styles from "./styles.scss";
 
 export const SelectedUnit: React.FC = () => {
-  const [sim] = useSim();
-  const selectedUnit = React.useMemo(
-    () => getSelected(sim),
-    [sim.index.settings.get()[0].cp.selectionManager.id]
-  );
+  const [[selectedUnits], gameStore] = useGameStore((store) => [
+    store.selectedUnits,
+  ]);
 
-  if (!selectedUnit) {
+  if (!selectedUnits.length) {
     return null;
   }
 
   return (
     <div className={styles.root}>
-      <div
-        className={styles.panel}
-        onDoubleClick={() => {
-          sim.index.settings.get()[0].cp.selectionManager.focused = true;
-        }}
-      >
-        <Text variant="caption">
-          {selectedUnit.cp.name?.value ??
-            (selectedUnit.hasTags(["collectible"]) ? "Collectible" : "Unknown")}
-        </Text>
+      <div className={styles.panel} onDoubleClick={gameStore.focus}>
+        {selectedUnits.length === 1 ? (
+          <Text variant="caption">
+            {selectedUnits[0].cp.name?.value ??
+              (selectedUnits[0].hasTags(["collectible"])
+                ? "Collectible"
+                : "Unknown")}
+          </Text>
+        ) : (
+          <Text variant="caption">
+            {selectedUnits[0].cp.name?.value ??
+              (selectedUnits[0].hasTags(["collectible"])
+                ? "Collectible"
+                : "Unknown")}{" "}
+            and {selectedUnits.length - 1} more
+          </Text>
+        )}
       </div>
     </div>
   );

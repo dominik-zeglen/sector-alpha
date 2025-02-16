@@ -1,19 +1,14 @@
-import type { Position2D } from "@core/components/position";
-import { random, subtract } from "mathjs";
+import { random } from "mathjs";
 import { fromPolar } from "@core/utils/misc";
+import type { Vec2 } from "ogl";
 import type { Sector } from "../archetypes/sector";
 import { sectorSize } from "../archetypes/sector";
 import { hecsToCartesian } from "../components/hecsPosition";
-import { createRenderGraphics } from "../components/renderGraphics";
 import { linkTeleportModules } from "../components/teleport";
 import type { Sim } from "../sim";
 import { createTeleporter } from "./facilities";
 
-export function createLink(
-  sim: Sim,
-  sectors: Sector[],
-  position?: Position2D[]
-) {
+export function createLink(sim: Sim, sectors: Sector[], position?: Vec2[]) {
   const positionA = hecsToCartesian(
     sectors[0].cp.hecsPosition.value,
     sectorSize / 10
@@ -23,11 +18,11 @@ export function createLink(
     sectorSize / 10
   );
 
-  const diff = subtract(positionB, positionA);
+  const diff = positionB.clone().sub(positionA);
   const angle = Math.atan2(diff[1], diff[0]);
 
   const [telA, telB] = sectors.map((sector, sectorIndex) => {
-    let linkPosition: Position2D;
+    let linkPosition: Vec2;
     if (!position?.[sectorIndex]) {
       const a =
         (sectorIndex === 0 ? angle : Math.PI + angle) +
@@ -46,7 +41,7 @@ export function createLink(
       },
       sim
     );
-    facility.addTag("discovered");
+    facility.addTag("discovered").addTag("gateway");
 
     const teleporter = sim
       .getOrThrow(facility.cp.modules.ids[0])
@@ -55,7 +50,6 @@ export function createLink(
     facility.removeTag("selection");
     return teleporter;
   });
-  telA.addComponent(createRenderGraphics("link"));
 
   linkTeleportModules(telA, telB);
 

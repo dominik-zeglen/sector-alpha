@@ -2,7 +2,6 @@ import Mustache from "mustache";
 import type { Mission, MissionCommon } from "@core/components/missions";
 import { filter, find, first, pipe, sort } from "@fxts/core";
 import type { Sim } from "@core/sim";
-import { distance } from "mathjs";
 import type { Facility } from "@core/archetypes/facility";
 import type { MissionHandler } from "../../types";
 import conversation from "../../../../world/data/missions/main/ffw/tutorial-trade.yml";
@@ -54,8 +53,8 @@ export const mainFfwTutorialTradeMissionHandler: MissionHandler = {
       ),
       sort(
         (a, b) =>
-          distance(a.cp.position.coord, miner.cp.position.coord) >
-          distance(b.cp.position.coord, miner.cp.position.coord)
+          a.cp.position.coord.distance(miner.cp.position.coord) >
+          b.cp.position.coord.distance(miner.cp.position.coord)
       ),
       first
     );

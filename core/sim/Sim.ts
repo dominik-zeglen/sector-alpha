@@ -12,9 +12,10 @@ import type { CoreComponents } from "@core/components/component";
 import type { EntityTag } from "@core/tags";
 import { componentMask } from "@core/components/masks";
 import LZString from "lz-string";
-import { ActionLoader } from "@core/actionLoader";
 import { Observable } from "@core/utils/observer";
 import { defaultIndexer } from "@core/systems/utils/default";
+import { Vec2 } from "ogl";
+import { isVec2 } from "@core/utils/misc";
 import { Entity, EntityComponents } from "../entity";
 import { BaseSim } from "./BaseSim";
 import type { System } from "../systems/system";
@@ -27,6 +28,8 @@ export interface SimConfig {
 
 @Exclude()
 export class Sim extends BaseSim {
+  delta = 0;
+
   @Expose()
   entityIdCounter: number = 1;
   hooks: {
@@ -55,12 +58,9 @@ export class Sim extends BaseSim {
   index: typeof defaultIndexer;
   paths: Record<string, Record<string, Path>>;
 
-  actions: ActionLoader;
-
   constructor({ systems }: SimConfig = { systems: [] }) {
     super();
 
-    this.actions = new ActionLoader(this);
     this.entities = new Map();
     this.hooks = {
       addComponent: new Observable("addComponent"),
@@ -98,6 +98,13 @@ export class Sim extends BaseSim {
   };
 
   next = (delta: number) => {
+    this.delta = delta;
+
+    if (delta === 0) {
+      this.updateTimer(delta);
+      return;
+    }
+
     this.hooks.phase.start.notify(delta);
     this.hooks.phase.init.notify(delta);
     this.hooks.phase.update.notify(delta);
@@ -112,12 +119,6 @@ export class Sim extends BaseSim {
     const settingsEntity = new Entity(this);
     settingsEntity
       .addComponent({
-        id: null,
-        secondaryId: null,
-        focused: false,
-        name: "selectionManager",
-      })
-      .addComponent({
         name: "systemManager",
         lastStatUpdate: 0,
         lastInflationStatUpdate: 0,
@@ -129,7 +130,7 @@ export class Sim extends BaseSim {
       .addComponent({
         name: "camera",
         zoom: 1,
-        position: [0, 0],
+        position: new Vec2(0, 0),
       });
   };
 
@@ -174,7 +175,6 @@ export class Sim extends BaseSim {
     if (!isHeadless) {
       window.sim = undefined!;
       window.selected = undefined!;
-      window.cheats = undefined!;
     }
   };
 
@@ -210,15 +210,28 @@ export class Sim extends BaseSim {
   }
 
   static load(config: SimConfig, data: string) {
-    const save = JSON.parse(data, (k, v) =>
-      typeof k === "string" && k.startsWith("BigInt:")
-        ? BigInt(k.split("BigInt:")[1])
-        : v
-    );
+    const save = JSON.parse(data, (_k, v) => {
+      if (!v) return v;
+
+      if (typeof v === "string" && v.startsWith("BigInt:")) {
+        return BigInt(v.split("BigInt:")[1]);
+      }
+      if (typeof v === "object" && isVec2(v)) {
+        const value = new Vec2(...v.value);
+        return value;
+      }
+
+      return v;
+    });
+
     const sim = plainToInstance(Sim, save);
     const entityMap = new Map();
 
     sim.entities.forEach((entity) => {
+      Object.assign(
+        entity.components,
+        save.entities.find((e) => e.id === entity.id)!.components
+      );
       entityMap.set(entity.id, entity);
       entity.sim = sim;
 
@@ -262,8 +275,14 @@ export class Sim extends BaseSim {
   }
 }
 
-// BigInt serialization monkeypatch
+// Serialization monkeypatches
+
 // eslint-disable-next-line func-names
 (BigInt.prototype as any).toJSON = function () {
   return `BigInt:${this.toString()}`;
+};
+
+// eslint-disable-next-line func-names
+(Vec2.prototype as any).toJSON = function () {
+  return { isVec2: true, value: this.toArray() };
 };

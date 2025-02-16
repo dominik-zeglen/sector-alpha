@@ -2,7 +2,7 @@ import Color from "color";
 import pick from "lodash/pick";
 import type { DockSize } from "@core/components/dockable";
 import { createDocks } from "@core/components/dockable";
-import type { Position2D } from "@core/components/position";
+import type { Vec2 } from "ogl";
 import { createDrive } from "../components/drive";
 import { Entity } from "../entity";
 import { createMining } from "../components/mining";
@@ -39,7 +39,7 @@ export function ship(entity: Entity): Ship {
 
 export interface InitialShipInput extends ShipInput {
   angle?: number;
-  position: Position2D;
+  position: Vec2;
   owner: Faction;
   sector: Sector;
   docks?: Record<DockSize, number>;
@@ -116,7 +116,6 @@ export function createShip(sim: Sim, initial: InitialShipInput): Ship {
     .addComponent({ name: "journal", entries: [] })
     .addComponent({
       name: "hitpoints",
-      g: { hp: null!, shield: null! },
       hp: {
         max: initial.hitpoints.hp.value,
         regen: initial.hitpoints.hp.regen,

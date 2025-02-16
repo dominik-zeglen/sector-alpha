@@ -26,7 +26,6 @@ import { pirateSpawningSystem } from "@core/systems/pirateSpawning";
 import { producingSystem } from "@core/systems/producing";
 import { AvgFrameReportingSystem } from "@core/systems/reporting/avgFrameReporting";
 import { sectorStatisticGatheringSystem } from "@core/systems/sectorStatisticGathering";
-import { selectingSystem } from "@core/systems/selecting";
 import { shipBuildingSystem } from "@core/systems/shipBuilding";
 import { storageQuotaPlanningSystem } from "@core/systems/storageQuotaPlanning";
 import { tradingSystem } from "@core/systems/trading";
@@ -66,7 +65,6 @@ export const createBaseConfig = async (): Promise<SimConfig> => {
   const config: SimConfig = {
     systems: [
       ...bootstrapSystems,
-      selectingSystem,
       undeployingSystem,
       attackingSystem,
       spottingSystem,

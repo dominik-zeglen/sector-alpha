@@ -13,12 +13,14 @@ const tags = [
   "asteroid",
   "virtual",
   "collectible",
+  "gateway",
   "discovered",
   "mainQuestStarted",
   "busy",
   "ai:attack-force",
   "ai:spare",
   "ai:mission",
+  "ui:arrow",
   ...shipRoles.map<`role:${ShipRole}`>((role) => `role:${role}`),
   ...modules.map<`facilityModuleType:${FacilityModuleType}`>(
     ({ type: facilityModuleType }) =>

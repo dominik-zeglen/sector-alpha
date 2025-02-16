@@ -1,4 +1,4 @@
-import type { Position2D } from "@core/components/position";
+import type { Vec2 } from "ogl";
 import { Entity } from "../entity";
 import { MissingComponentError } from "../errors";
 import type { Sim } from "../sim";
@@ -22,7 +22,7 @@ export interface WaypointInput {
    * ID of the entity that owns this waypoint, eg. a ship that created it
    */
   owner: number;
-  value: Position2D;
+  value: Vec2;
   sector: number;
 }
 

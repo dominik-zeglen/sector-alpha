@@ -1,10 +1,8 @@
 import { atom, useRecoilState } from "recoil";
 import type { Sim } from "@core/sim";
 import { Observable } from "@core/utils/observer";
-import notificationSound from "@assets/ui/sounds/notification.wav";
-import { Howl } from "howler";
+import sounds from "@assets/ui/sounds";
 import type { ConfigDialogProps } from "./components/ConfigDialog";
-import type { ContextMenu } from "./components/ContextMenu/types";
 import type { TradeDialogProps } from "./components/TradeDialog";
 import type { FacilityModuleManagerProps } from "./components/FacilityModuleManager";
 import type { FacilityMoneyManagerProps } from "./components/FacilityMoneyManager";
@@ -15,26 +13,14 @@ import type { NotificationProps } from "./components/Notifications";
 import type { Notification } from "./components/Notifications/types";
 import { useObservable } from "./hooks/useObservable";
 import type { ImmediateConversationDialogProps } from "./components/ImmediateConversation";
+import { useGameSettings } from "./hooks/useGameSettings";
 
-export const sim = atom<Sim>({
+export const simAtom = atom<Sim>({
   key: "sim",
   default: window.sim as Sim,
   dangerouslyAllowMutability: true,
 });
-export const useSim = () => useRecoilState(sim);
-
-export const contextMenu = atom<ContextMenu>({
-  key: "contextMenu",
-  default: {
-    active: false,
-    position: [0, 0],
-    worldPosition: [0, 0],
-    sector: null,
-  },
-  dangerouslyAllowMutability: true,
-});
-export const useContextMenu = () => useRecoilState(contextMenu);
-export type ContextMenuApi = ReturnType<typeof useRecoilState<ContextMenu>>;
+export const useSim = () => useRecoilState(simAtom);
 
 export type GameDialogProps =
   | TradeDialogProps
@@ -50,22 +36,12 @@ export type GameDialogProps =
 export const gameDialog = new Observable<GameDialogProps>("gameDialog");
 export const useGameDialog = () => useObservable(gameDialog);
 
-export type GameOverlayProps = "fleet" | "missions" | "dev" | null;
-
-export const gameOverlay = atom<GameOverlayProps>({
-  key: "gameOverlay",
-  default: null,
-});
-export const useGameOverlay = () => useRecoilState(gameOverlay);
-
-const notificationHowl = new Howl({
-  src: notificationSound,
-});
 export const notificationsAtom = atom<Notification[]>({
   key: "notiifications",
   default: [],
 });
 export const useNotifications = () => {
+  const [settings] = useGameSettings();
   const [notifications, setNotifications] = useRecoilState(notificationsAtom);
 
   const removeNotification = (id: number) => {
@@ -83,7 +59,8 @@ export const useNotifications = () => {
       ...prevNotifications,
       { ...notification, id },
     ]);
-    notificationHowl.play();
+    sounds.notification.volume(settings.volume.ui);
+    sounds.notification.play();
     if (notification.expires) {
       setTimeout(() => removeNotification(id), notification.expires);
     }

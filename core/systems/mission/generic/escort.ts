@@ -3,7 +3,7 @@ import { filter, find, pipe, toArray } from "@fxts/core";
 import type { Sim } from "@core/sim";
 import { mustacheConversation, pickRandom } from "@core/utils/generators";
 import shipNames from "@core/world/data/shipNames.json";
-import { add, distance, random, randomInt } from "mathjs";
+import { random, randomInt } from "mathjs";
 import type { Facility } from "@core/archetypes/facility";
 import { facility } from "@core/archetypes/facility";
 import type { Faction } from "@core/archetypes/faction";
@@ -200,8 +200,7 @@ export const genericEscortMissionHandler: MissionHandler = {
       .requireComponents(["name"]);
     teleport(
       freighter,
-      add(
-        fromPolar(random(0, 2 * Math.PI), random(1, 3)),
+      fromPolar(random(0, 2 * Math.PI), random(1, 3)).add(
         origin.cp.position.coord
       ),
       origin.cp.position.sector
@@ -261,10 +260,8 @@ export const genericEscortMissionHandler: MissionHandler = {
         (s) =>
           s.tags.has("role:military") &&
           s.cp.position.sector === freighter.cp.position.sector &&
-          (distance(
-            freighter.cp.position.coord,
-            s.cp.position.coord
-          ) as number) <= maxEscortDistance
+          freighter.cp.position.coord.distance(s.cp.position.coord) <=
+            maxEscortDistance
       )
     );
 

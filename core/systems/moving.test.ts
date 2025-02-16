@@ -145,7 +145,7 @@ describe("Ship", () => {
     });
 
     orderExecutingSystem.exec();
-    for (let index = 0; index < 9; index++) {
+    for (let index = 0; index < 12; index++) {
       navigatingSystem.exec(1);
       movingSystem.exec(1);
     }

@@ -12,7 +12,7 @@ type Ship = RequirePureComponent<"name" | "autoOrder">;
 interface ShipButtonProps {
   className?: string;
   ship: Ship;
-  selected: number | undefined;
+  selected: boolean;
   onSelect: (_id: number) => void;
   onFocus: () => void;
   onContextMenu: (
@@ -31,7 +31,7 @@ export const ShipButton: React.FC<ShipButtonProps> = ({
 }) => (
   <BaseButton
     className={clsx(styles.ship, className, {
-      [styles.shipActive]: selected === ship.id,
+      [styles.shipActive]: selected,
     })}
     onClick={() => onSelect(ship.id)}
     onDoubleClick={onFocus}

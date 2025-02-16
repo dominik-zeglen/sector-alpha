@@ -1,4 +1,4 @@
-import { difference } from "lodash";
+import difference from "lodash/difference";
 import type { CoreComponents } from "./components/component";
 import type { DockSize } from "./components/dockable";
 import type { Entity } from "./entity";

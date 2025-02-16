@@ -43,6 +43,6 @@ export const shipClasses = shipClassesData.map((s) => ({
   ...s,
   damage: {
     ...s.damage,
-    angle: (s.damage.angle / 360) * 2 * Math.PI,
+    angle: s.damage.angle,
   },
 })) as ShipInput[];

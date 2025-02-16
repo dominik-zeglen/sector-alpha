@@ -15,10 +15,6 @@ const EntityName: React.FC<{
   const onSubmit = () => {
     entity.cp.name.value = getValues().name || "Unnamed Sector";
     reset();
-
-    if (entity.cp.renderGraphics) {
-      entity.cp.renderGraphics.redraw = true;
-    }
   };
 
   if (!editable)

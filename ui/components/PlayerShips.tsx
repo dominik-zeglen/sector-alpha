@@ -5,8 +5,10 @@ import {
   CollapsibleSummary,
 } from "@kit/Collapsible";
 import { first } from "@fxts/core";
-import { getSelected } from "@core/components/selection";
-import { useContextMenu, useSim } from "../atoms";
+import { useGameStore } from "@ui/state/game";
+import { useContextMenuStore } from "@ui/state/contextMenu";
+import { Vec2 } from "ogl";
+import { useSim } from "../atoms";
 import { ShipButton } from "./ShipButton";
 
 export const PlayerShips: React.FC = () => {
@@ -16,34 +18,21 @@ export const PlayerShips: React.FC = () => {
     .get()
     .filter((ship) => ship.cp.owner?.id === player.id);
 
-  const [selected, setSelectedState] = React.useState<number | undefined>(
-    getSelected(sim)?.id
-  );
-  const [, setMenu] = useContextMenu();
+  const [[selected], gameStore] = useGameStore((store) => [
+    store.selectedUnits,
+  ]);
+  const [, contextMenuStore] = useContextMenuStore(() => []);
 
-  const onSelect = (id: number) => {
-    sim.index.settings.get()[0].cp.selectionManager.id = id;
-    setSelectedState(id);
-  };
-  const onFocus = () => {
-    sim.index.settings.get()[0].cp.selectionManager.focused = true;
-  };
-  const onTarget = (id: number) => {
-    sim.index.settings.get()[0].cp.selectionManager.secondaryId = id;
-  };
   const onContextMenu = (
     id: number,
     event: React.MouseEvent<HTMLButtonElement>
   ) => {
     event.preventDefault();
-    onTarget(id);
-    if (id !== selected) {
-      setMenu({
-        active: true,
-        position: [event.clientX, event.clientY],
+    if (!selected.some((unit) => unit.id)) {
+      contextMenuStore.open({
+        position: new Vec2(event.clientX, event.clientY),
         worldPosition: undefined!,
         sector: null,
-        overlay: true,
       });
     }
   };
@@ -59,9 +48,11 @@ export const PlayerShips: React.FC = () => {
             <ShipButton
               key={ship.id}
               ship={ship}
-              selected={selected}
-              onFocus={onFocus}
-              onSelect={onSelect}
+              selected={selected.includes(ship)}
+              onFocus={gameStore.focus}
+              onSelect={(id) =>
+                gameStore.setSelectedUnits([sim.getOrThrow(id)])
+              }
               onContextMenu={onContextMenu}
             />
           ))

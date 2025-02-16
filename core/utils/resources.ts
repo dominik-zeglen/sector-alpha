@@ -1,6 +1,6 @@
 import { getFieldMax } from "@core/archetypes/asteroidField";
 import { filter, pipe, toArray } from "@fxts/core";
-import { groupBy } from "lodash";
+import groupBy from "lodash/groupBy";
 import { sum } from "mathjs";
 import type { Sector } from "../archetypes/sector";
 import type { Commodity } from "../economy/commodity";

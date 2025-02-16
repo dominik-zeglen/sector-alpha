@@ -1,9 +1,10 @@
 import { createFacilityModule } from "@core/archetypes/facilityModule";
-import { commodityPrices, perCommodity } from "@core/utils/perCommodity";
+import { perCommodity } from "@core/utils/perCommodity";
 import type { Facility } from "@core/archetypes/facility";
 import type { TradeOffer } from "@core/components/trade";
 import { filter, find, map, pipe, sum } from "@fxts/core";
 import { addFacilityModule } from "@core/utils/entityModules";
+import { commodityPrices } from "@core/economy/utils";
 import type { Commodity } from "../economy/commodity";
 import type { Sim } from "../sim";
 import { System } from "./system";

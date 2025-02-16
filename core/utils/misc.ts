@@ -1,11 +1,11 @@
 import { sectorSize } from "@core/archetypes/sector";
 import { ship } from "@core/archetypes/ship";
-import type { Position2D } from "@core/components/position";
 import type { Entity } from "@core/entity";
 import settings from "@core/settings";
 import type { RequireComponent } from "@core/tsHelpers";
 import { first } from "@fxts/core";
-import { add, norm, random } from "mathjs";
+import { random } from "mathjs";
+import { Vec2 } from "ogl";
 
 export function isOwnedByPlayer(entity: Entity): boolean {
   return entity!.cp.owner?.id === first(entity.sim.index.player.getIt())!.id;
@@ -19,7 +19,7 @@ export function getSubordinates(entity: RequireComponent<"subordinates">) {
 
 export function getAngleDiff(
   origin: RequireComponent<"position">,
-  path: Position2D
+  path: Vec2
 ): number {
   const pathAngle = Math.atan2(path[1], path[0]);
   const dAngle = pathAngle - origin.cp.position.angle;
@@ -27,18 +27,21 @@ export function getAngleDiff(
   return Math.atan2(Math.sin(dAngle), Math.cos(dAngle));
 }
 
+export function fromPolar(angle: number, distance: number): Vec2 {
+  return new Vec2(distance * Math.cos(angle), distance * Math.sin(angle));
+}
+
 export function getRandomPositionInBounds(
   entity: RequireComponent<"position">,
   distance = 2
-): Position2D {
-  let position: Position2D;
+): Vec2 {
+  let position: Vec2;
 
   do {
-    position = add(entity.cp.position.coord, [
-      random(-distance, distance),
-      random(-distance, distance),
-    ]);
-  } while ((norm(position) as number) > sectorSize);
+    position = fromPolar(random(0, 2 * Math.PI), random(0, distance)).add(
+      entity.cp.position.coord
+    );
+  } while (position.len() > sectorSize);
 
   return position;
 }
@@ -54,6 +57,6 @@ export function getGameDate(timeOffset: number): string {
   }.${2519 + (Math.floor(actual / gameYear) % 12)}`;
 }
 
-export function fromPolar(angle: number, distance: number): Position2D {
-  return [distance * Math.cos(angle), distance * Math.sin(angle)];
+export function isVec2(v: object): v is { value: number[] } {
+  return (v as any).isVec2 === true;
 }

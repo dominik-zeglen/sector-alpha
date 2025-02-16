@@ -15,11 +15,11 @@ import type { PriceBelief } from "../components/trade";
 import type { Commodity } from "../economy/commodity";
 import { commoditiesArray } from "../economy/commodity";
 import type { WithTrade } from "../economy/utils";
-import { getSectorsInTeleportRange } from "../economy/utils";
+import { commodityPrices, getSectorsInTeleportRange } from "../economy/utils";
 import type { Sim } from "../sim";
 import type { RequireComponent } from "../tsHelpers";
 import { limit } from "../utils/limit";
-import { commodityPrices, perCommodity } from "../utils/perCommodity";
+import { perCommodity } from "../utils/perCommodity";
 import { System } from "./system";
 
 /**

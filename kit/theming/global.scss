@@ -61,6 +61,10 @@ th {
   height: 100vh;
 }
 
+:global(.tp-dfwv .tp-rotv) {
+  font-size: var(--typography-default);
+}
+
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
   appearance: none;

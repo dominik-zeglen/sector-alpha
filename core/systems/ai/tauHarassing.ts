@@ -4,7 +4,6 @@ import type { Entity } from "@core/entity";
 import type { Sim } from "@core/sim";
 import { getSubordinates } from "@core/utils/misc";
 import { filter, first, map, pipe, sortBy } from "@fxts/core";
-import { distance } from "mathjs";
 import { addSubordinate } from "@core/components/subordinates";
 import { isDev } from "@core/settings";
 import { requestShip } from "./shipPlanning";
@@ -141,10 +140,7 @@ export class TauHarassingSystem extends System<"exec"> {
       fighters.every(
         (f) =>
           f.cp.position.sector === commander!.cp.position.sector &&
-          (distance(
-            f.cp.position.coord,
-            commander!.cp.position.coord
-          ) as number) < 4
+          f.cp.position.coord.distance(commander!.cp.position.coord) < 4
       )
     ) {
       return commander;

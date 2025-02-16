@@ -11,6 +11,7 @@ import type {
 } from "@core/systems/mission/types";
 import { Scrollbar } from "@kit/Scrollbar";
 import { BaseButton } from "@kit/BaseButton";
+import { usesize } from "@kit/theming/style";
 import styles from "./styles.scss";
 
 export interface ConversationDialogProps extends DialogProps {
@@ -106,7 +107,11 @@ export const ConversationDialog: React.FC<ConversationDialogProps> = ({
   };
 
   return (
-    <Dialog {...dialogProps} onClose={canClose ? onClose : null} width="650px">
+    <Dialog
+      {...dialogProps}
+      onClose={canClose ? onClose : null}
+      width={usesize(60)}
+    >
       <Scrollbar
         className={clsx(styles.scrollable, {
           [styles.scrollableNoResponses]: canClose,

@@ -1,6 +1,5 @@
 import { clearTarget, setTarget, stop, teleport } from "@core/utils/moving";
-import { distance } from "mathjs";
-import { show } from "@core/components/render";
+import { HideReason } from "@core/components/render";
 import { waypoint } from "../../archetypes/waypoint";
 import { defaultDriveLimit } from "../../components/drive";
 import type {
@@ -58,15 +57,16 @@ export function undockAction(
   entity.cp.dockable.undocking = true;
   entity.cp.drive.active = true;
   entity.cp.drive.target = null;
-  show(entity.cp.render);
+  if (entity.cp.render) {
+    entity.cp.render.hidden &= ~HideReason.Docked;
+  }
   entity.cp.movable.velocity = entity.cp.drive.maneuver;
   const facility = entity.sim
     .getOrThrow(entity.cp.dockable!.dockedIn!)
     .requireComponents(["position"]);
   entity.cp.position.angle = facility.cp.position.angle + Math.PI;
   const undocked =
-    (distance(entity.cp.position.coord, facility.cp.position.coord) as number) >
-    0.4;
+    entity.cp.position.coord.distance(facility.cp.position.coord) > 0.4;
 
   if (undocked) {
     undockShip(entity);

@@ -13,6 +13,7 @@ import { isOwnedByPlayer } from "@core/utils/misc";
 import { Tooltip } from "@kit/Tooltip";
 import Text from "@kit/Text";
 import { ConfigIcon, ExclamationIcon, LocationIcon } from "@assets/ui/icons";
+import { gameStore } from "@ui/state/game";
 import styles from "./Production.scss";
 
 export interface ProductionProps {
@@ -100,14 +101,10 @@ export const Production: React.FC<ProductionProps> = ({ entity }) => {
                         {teleport && (
                           <IconButton
                             onClick={() => {
-                              const { selectionManager } = entity.sim
-                                .find((e) =>
-                                  e.hasComponents(["selectionManager"])
-                                )!
-                                .requireComponents(["selectionManager"]).cp;
-
-                              selectionManager.id = teleport.cp.parent!.id;
-                              selectionManager.focused = true;
+                              gameStore.setSelectedUnits([
+                                entity.sim.getOrThrow(teleport.cp.parent!.id),
+                              ]);
+                              gameStore.focus();
                             }}
                           >
                             <LocationIcon />

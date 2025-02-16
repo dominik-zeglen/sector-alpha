@@ -4,8 +4,9 @@
   appearance: none;
   background: none;
   border: none;
+  font-size: var(--typography-button);
   text-align: left;
-  color: var(--palette-text);
+  color: var(--palette-text-1);
   cursor: pointer;
   padding: usesize(0.3) 0;
   width: fill-available;

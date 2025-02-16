@@ -1,0 +1,15 @@
+diff --git a/node_modules/glslify-deps/index.js b/node_modules/glslify-deps/index.js
+index a0ecbb4..2527d49 100644
+--- a/node_modules/glslify-deps/index.js
++++ b/node_modules/glslify-deps/index.js
+@@ -146,7 +146,9 @@ Depper.prototype.add = function(filename, done) {
+   return dep
+ 
+   function extractPreprocessors() {
+-    var tokens = tokenize(dep.source)
++    var tokens = tokenize(dep.source, {
++      version: dep.source.match(/#version (.*)/)?.[1] ?? "300 es",
++    })
+ 
+     for (var i = 0; i < tokens.length; i++) {
+       var token = tokens[i]

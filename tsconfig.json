@@ -14,7 +14,8 @@
       "@core/*": ["core/*"],
       "@devtools/*": ["devtools/*"],
       "@kit/*": ["kit/*"],
-      "@ui/*": ["ui/*"]
+      "@ui/*": ["ui/*"],
+      "@ogl-engine/*": ["ogl-engine/*"]
     }
   },
   "exclude": ["**/*.test.*"],

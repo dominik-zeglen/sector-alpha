@@ -16,6 +16,7 @@ import { getCrewMultiplier } from "@core/systems/producing";
 import { AnimatedBackdrop } from "@kit/AnimatedBackdrop";
 import { Button } from "@kit/Button";
 import { CloseIcon } from "@assets/ui/icons";
+import { OGLModel } from "@devtools/components/OGLModel/OGLModel";
 import styles from "./styles.scss";
 import facilityModules from "../../core/world/data/facilityModules.json";
 import facilityTemplates from "../../core/world/data/facilityTemplates.json";
@@ -47,7 +48,7 @@ const FacilityBuilder: React.FC = () => {
   return (
     <div className={styles.root}>
       <div className={styles.preview}>
-        here be monsters
+        <OGLModel />
         <div className={styles.templateDropdownContainer}>
           <Dropdown className={styles.templateDropdown}>
             <DropdownButton>

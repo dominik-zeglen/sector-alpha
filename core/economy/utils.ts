@@ -15,6 +15,8 @@ import {
   reverse,
   take,
   identity,
+  min,
+  max,
 } from "@fxts/core";
 import type { Faction } from "@core/archetypes/faction";
 import { relationThresholds } from "@core/components/relations";
@@ -30,6 +32,7 @@ import { sector as asSector } from "../archetypes/sector";
 import type { Waypoint } from "../archetypes/waypoint";
 import { perCommodity } from "../utils/perCommodity";
 import { pickRandom } from "../utils/generators";
+import modules from "../world/data/facilityModules.json";
 
 export const tradeComponents = [
   "trade",
@@ -356,3 +359,12 @@ export function getCommodityCost(
     Math.floor
   );
 }
+
+/**
+ * Calculates min, avg and max price of commodities based on production
+ */
+export const commodityPrices = perCommodity((commodity) => ({
+  min: getCommodityCost(commodity, modules as any, min),
+  avg: getCommodityCost(commodity, modules as any),
+  max: getCommodityCost(commodity, modules as any, max),
+}));

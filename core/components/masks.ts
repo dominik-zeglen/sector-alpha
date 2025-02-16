@@ -32,7 +32,7 @@ export const componentMask: Record<keyof CoreComponents, bigint> = [
   "model",
   "orders",
   "relations",
-  "renderGraphics",
+  "renderGraphics", // @deprecated
   "sectorStats",
   "shipyard",
   "subordinates",

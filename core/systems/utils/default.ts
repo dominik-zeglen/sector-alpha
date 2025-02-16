@@ -1,10 +1,10 @@
 import { shipComponents } from "@core/archetypes/ship";
 import { collectibleComponents } from "@core/archetypes/collectible";
-import { asteroidFieldComponents } from "../../archetypes/asteroidField";
-import { facilityComponents } from "../../archetypes/facility";
-import { factionComponents } from "../../archetypes/faction";
-import { sectorComponents } from "../../archetypes/sector";
-import { tradeComponents } from "../../economy/utils";
+import { asteroidFieldComponents } from "@core/archetypes/asteroidField";
+import { facilityComponents } from "@core/archetypes/facility";
+import { factionComponents } from "@core/archetypes/faction";
+import { sectorComponents } from "@core/archetypes/sector";
+import { tradeComponents } from "@core/economy/utils";
 import { SectorIndex } from "./sectorIndex";
 import { EntityIndex } from "./entityIndex";
 
@@ -18,7 +18,7 @@ export const defaultIndexer = {
   collectibles: new EntityIndex(collectibleComponents, ["collectible"]),
   disposable: new EntityIndex(["disposable"]),
   facilities: new EntityIndex(
-    ["modules", "position", "facilityModuleQueue", "subordinates"],
+    ["modules", "position", "facilityModuleQueue", "subordinates", "render"],
     [],
     true
   ),
@@ -32,11 +32,11 @@ export const defaultIndexer = {
   orderable: new EntityIndex(["orders", "position", "model", "owner"]),
   player: new EntityIndex([...factionComponents, "missions"], ["player"], true),
   productionByModules: new EntityIndex(["production", "parent"]),
-  renderableGraphics: new EntityIndex(["renderGraphics"]),
+  renderable: new EntityIndex(["render", "position"]),
   sectors: new EntityIndex(sectorComponents, [], true),
   selectable: new EntityIndex(["render", "position"], ["selection"]),
   settings: new EntityIndex(
-    ["selectionManager", "systemManager", "inflationStats", "camera"],
+    ["systemManager", "inflationStats", "camera"],
     [],
     true
   ),
@@ -52,4 +52,5 @@ export const defaultIndexer = {
   teleports: new EntityIndex(["teleport"], [], true),
   trading: new EntityIndex(tradeComponents),
   sectorTrading: new SectorIndex(tradeComponents),
+  sectorShips: new SectorIndex(shipComponents),
 };

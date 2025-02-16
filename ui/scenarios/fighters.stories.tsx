@@ -12,7 +12,6 @@ import { orderExecutingSystem } from "@core/systems/orderExecuting/orderExecutin
 import { attackingSystem } from "@core/systems/attacking";
 import { deadUnregisteringSystem } from "@core/systems/deadUnregistering";
 import { pathPlanningSystem } from "@core/systems/pathPlanning";
-import { RenderingSystem } from "@core/systems/rendering";
 import { createSector } from "@core/archetypes/sector";
 import type { Faction } from "@core/archetypes/faction";
 import { createFaction } from "@core/archetypes/faction";
@@ -28,18 +27,19 @@ import {
   changeRelations,
   relationThresholds,
 } from "@core/components/relations";
-import { selectingSystem } from "@core/systems/selecting";
 import settings from "@core/settings";
+import { TacticalMap } from "@ui/components/TacticalMap/TacticalMap";
+import { gameStore } from "@ui/state/game";
+import { Vec2 } from "ogl";
 
 const Game: React.FC<{ factions: number; fighters: number }> = ({
   factions,
   fighters,
 }) => {
+  const [sim, setSim] = React.useState<Sim | null>(null);
   React.useEffect(() => {
     settings.bootTime = 0;
-    const renderingSystem = new RenderingSystem([undefined!, () => {}]);
-    renderingSystem.enableResizing = false;
-    const sim = new Sim({
+    const xSim = new Sim({
       systems: [
         pathPlanningSystem,
         movingSystem,
@@ -51,21 +51,30 @@ const Game: React.FC<{ factions: number; fighters: number }> = ({
         orderExecutingSystem,
         attackingSystem,
         deadUnregisteringSystem,
-        renderingSystem,
-        selectingSystem,
       ],
     });
-    sim.init();
+    xSim.init();
 
-    const sector = createSector(sim, {
+    document.addEventListener("keydown", (e) => {
+      if (e.key === " ") {
+        if (xSim.speed > 0) {
+          xSim.pause();
+        } else {
+          xSim.setSpeed(xSim.prevSpeed);
+        }
+      }
+    });
+
+    const sector = createSector(xSim, {
       position: [0, 0, 0],
       name: "Sector",
       slug: "sector",
     });
+    gameStore.setSector(sector);
 
     const generatedFactions: Faction[] = [];
     for (let i = 0; i < factions; i++) {
-      const faction = createFaction(`Faction #${i + 1}`, sim);
+      const faction = createFaction(`Faction #${i + 1}`, xSim);
       faction.cp.color.value = Color.hsv((i / factions) * 360, 100, 100)
         .rgb()
         .string();
@@ -73,7 +82,7 @@ const Game: React.FC<{ factions: number; fighters: number }> = ({
       generatedFactions.push(faction);
 
       for (let j = 0; j < fighters; j++) {
-        const fighter = createShip(sim, {
+        const fighter = createShip(xSim, {
           ...pickRandom(shipClasses.filter(({ slug }) => slug === "dart")),
           angle: random(-Math.PI, Math.PI),
           position: fromPolar(
@@ -88,8 +97,8 @@ const Game: React.FC<{ factions: number; fighters: number }> = ({
             type: "move",
             actions: moveToActions(
               fighter,
-              createWaypoint(sim, {
-                value: [0, 0],
+              createWaypoint(xSim, {
+                value: new Vec2(0, 0),
                 sector: sector.id,
                 owner: faction.id,
               }),
@@ -107,14 +116,17 @@ const Game: React.FC<{ factions: number; fighters: number }> = ({
       }
     }
 
-    sim.start();
+    xSim.start();
+    setSim(xSim);
 
     return () => {
-      sim.destroy();
+      xSim.destroy();
     };
   }, [factions, fighters]);
 
-  return <div id="canvasRoot" />;
+  if (!sim) return null;
+
+  return <TacticalMap sim={sim} />;
 };
 
 const Template: StoryFn = ({ factions, fighters }) => (

@@ -21,10 +21,21 @@
       "time": 60
     },
     "role": "transport",
-    "damage": { "angle": 30, "value": 1, "range": 1, "cooldown": 0.3 },
+    "damage": {
+      "angle": 0.5235987755982988,
+      "value": 1,
+      "range": 1,
+      "cooldown": 0.3
+    },
     "hitpoints": {
-      "hp": { "value": 90, "regen": 0.2 },
-      "shield": { "value": 30, "regen": 2 }
+      "hp": {
+        "value": 90,
+        "regen": 0.2
+      },
+      "shield": {
+        "value": 30,
+        "regen": 2
+      }
     }
   },
   {
@@ -49,10 +60,21 @@
       "time": 60
     },
     "role": "transport",
-    "damage": { "angle": 30, "value": 1, "range": 1, "cooldown": 0.3 },
+    "damage": {
+      "angle": 0.5235987755982988,
+      "value": 1,
+      "range": 1,
+      "cooldown": 0.3
+    },
     "hitpoints": {
-      "hp": { "value": 90, "regen": 0.2 },
-      "shield": { "value": 30, "regen": 2 }
+      "hp": {
+        "value": 90,
+        "regen": 0.2
+      },
+      "shield": {
+        "value": 30,
+        "regen": 2
+      }
     }
   },
   {
@@ -77,10 +99,21 @@
       "time": 60
     },
     "role": "transport",
-    "damage": { "angle": 30, "value": 2, "range": 1, "cooldown": 0.3 },
+    "damage": {
+      "angle": 0.5235987755982988,
+      "value": 2,
+      "range": 1,
+      "cooldown": 0.3
+    },
     "hitpoints": {
-      "hp": { "value": 780, "regen": 0.2 },
-      "shield": { "value": 90, "regen": 4 }
+      "hp": {
+        "value": 780,
+        "regen": 0.2
+      },
+      "shield": {
+        "value": 90,
+        "regen": 4
+      }
     }
   },
   {
@@ -105,10 +138,21 @@
       "time": 60
     },
     "role": "transport",
-    "damage": { "angle": 30, "value": 2, "range": 1, "cooldown": 0.3 },
+    "damage": {
+      "angle": 0.5235987755982988,
+      "value": 2,
+      "range": 1,
+      "cooldown": 0.3
+    },
     "hitpoints": {
-      "hp": { "value": 780, "regen": 0.2 },
-      "shield": { "value": 90, "regen": 4 }
+      "hp": {
+        "value": 780,
+        "regen": 0.2
+      },
+      "shield": {
+        "value": 90,
+        "regen": 4
+      }
     }
   },
   {
@@ -133,10 +177,21 @@
       "time": 60
     },
     "role": "transport",
-    "damage": { "angle": 30, "value": 5, "range": 1, "cooldown": 0.3 },
+    "damage": {
+      "angle": 0.5235987755982988,
+      "value": 5,
+      "range": 1,
+      "cooldown": 0.3
+    },
     "hitpoints": {
-      "hp": { "value": 3900, "regen": 0.2 },
-      "shield": { "value": 300, "regen": 8 }
+      "hp": {
+        "value": 3900,
+        "regen": 0.2
+      },
+      "shield": {
+        "value": 300,
+        "regen": 8
+      }
     }
   },
   {
@@ -161,15 +216,26 @@
       "time": 60
     },
     "role": "transport",
-    "damage": { "angle": 30, "value": 1, "range": 1, "cooldown": 0.3 },
+    "damage": {
+      "angle": 0.5235987755982988,
+      "value": 1,
+      "range": 1,
+      "cooldown": 0.3
+    },
     "hitpoints": {
-      "hp": { "value": 3900, "regen": 0.2 },
-      "shield": { "value": 300, "regen": 8 }
+      "hp": {
+        "value": 3900,
+        "regen": 0.2
+      },
+      "shield": {
+        "value": 300,
+        "regen": 8
+      }
     }
   },
   {
-    "name": "Miner A",
-    "slug": "minerA",
+    "name": "Marble",
+    "slug": "marble",
     "storage": 160,
     "mining": 1,
     "texture": "mMin",
@@ -189,10 +255,21 @@
       "time": 60
     },
     "role": "mining",
-    "damage": { "angle": 30, "value": 1, "range": 1, "cooldown": 0.5 },
+    "damage": {
+      "angle": 0.5235987755982988,
+      "value": 1,
+      "range": 1,
+      "cooldown": 0.5
+    },
     "hitpoints": {
-      "hp": { "value": 780, "regen": 0.2 },
-      "shield": { "value": 90, "regen": 2 }
+      "hp": {
+        "value": 780,
+        "regen": 0.2
+      },
+      "shield": {
+        "value": 90,
+        "regen": 2
+      }
     }
   },
   {
@@ -217,15 +294,32 @@
       "time": 60
     },
     "role": "mining",
-    "damage": { "angle": 30, "value": 1, "range": 1, "cooldown": 0.5 },
+    "damage": {
+      "angle": 0.5235987755982988,
+      "value": 1,
+      "range": 1,
+      "cooldown": 0.5
+    },
     "hitpoints": {
-      "hp": { "value": 780, "regen": 0.2 },
-      "shield": { "value": 90, "regen": 2 }
+      "hp": {
+        "value": 780,
+        "regen": 0.2
+      },
+      "shield": {
+        "value": 90,
+        "regen": 2
+      }
     }
   },
   {
     "acceleration": 0.13,
-    "build": { "time": 190, "cost": { "fuel": 2900, "tauMetal": 700 } },
+    "build": {
+      "time": 190,
+      "cost": {
+        "fuel": 2900,
+        "tauMetal": 700
+      }
+    },
     "mining": 1.7,
     "role": "mining",
     "cruise": 5,
@@ -237,10 +331,21 @@
     "storage": 210,
     "texture": "mMin",
     "slug": "minerTau",
-    "damage": { "angle": 30, "value": 1, "range": 1, "cooldown": 0.5 },
+    "damage": {
+      "angle": 0.5235987755982988,
+      "value": 1,
+      "range": 1,
+      "cooldown": 0.5
+    },
     "hitpoints": {
-      "hp": { "value": 780, "regen": 0.2 },
-      "shield": { "value": 90, "regen": 2 }
+      "hp": {
+        "value": 780,
+        "regen": 0.2
+      },
+      "shield": {
+        "value": 90,
+        "regen": 2
+      }
     }
   },
   {
@@ -266,10 +371,21 @@
     "storage": 100,
     "texture": "lBld",
     "slug": "facilityStarter",
-    "damage": { "angle": 30, "value": 5, "range": 1, "cooldown": 1 },
+    "damage": {
+      "angle": 0.5235987755982988,
+      "value": 5,
+      "range": 1,
+      "cooldown": 1
+    },
     "hitpoints": {
-      "hp": { "value": 3900, "regen": 0.2 },
-      "shield": { "value": 300, "regen": 10 }
+      "hp": {
+        "value": 3900,
+        "regen": 0.2
+      },
+      "shield": {
+        "value": 300,
+        "regen": 10
+      }
     }
   },
   {
@@ -295,10 +411,21 @@
     "storage": 0,
     "texture": "lStg",
     "slug": "facilityBuilder",
-    "damage": { "angle": 30, "value": 5, "range": 1, "cooldown": 1 },
+    "damage": {
+      "angle": 0.5235987755982988,
+      "value": 5,
+      "range": 1,
+      "cooldown": 1
+    },
     "hitpoints": {
-      "hp": { "value": 3900, "regen": 0.2 },
-      "shield": { "value": 300, "regen": 10 }
+      "hp": {
+        "value": 3900,
+        "regen": 0.2
+      },
+      "shield": {
+        "value": 300,
+        "regen": 10
+      }
     }
   },
   {
@@ -313,7 +440,12 @@
         "engineParts": 10
       }
     },
-    "damage": { "angle": 30, "value": 4, "range": 1.2, "cooldown": 0.2 },
+    "damage": {
+      "angle": 0.7853981633974483,
+      "value": 10,
+      "range": 1.2,
+      "cooldown": 0.5
+    },
     "range": 2,
     "mining": 0,
     "role": "military",
@@ -327,8 +459,14 @@
     "texture": "sMil",
     "slug": "dart",
     "hitpoints": {
-      "hp": { "value": 110, "regen": 0.2 },
-      "shield": { "value": 35, "regen": 3 }
+      "hp": {
+        "value": 110,
+        "regen": 0.2
+      },
+      "shield": {
+        "value": 35,
+        "regen": 3
+      }
     }
   },
   {
@@ -343,7 +481,12 @@
         "engineParts": 62
       }
     },
-    "damage": { "angle": 30, "value": 13, "range": 1.4, "cooldown": 0.3 },
+    "damage": {
+      "angle": 0.5235987755982988,
+      "value": 13,
+      "range": 1.4,
+      "cooldown": 0.3
+    },
     "range": 2.7,
     "mining": 0,
     "role": "military",
@@ -357,17 +500,32 @@
     "texture": "mMil",
     "slug": "gunboat",
     "hitpoints": {
-      "hp": { "value": 540, "regen": 0.2 },
-      "shield": { "value": 120, "regen": 6 }
+      "hp": {
+        "value": 540,
+        "regen": 0.2
+      },
+      "shield": {
+        "value": 120,
+        "regen": 6
+      }
     }
   },
   {
     "acceleration": 0.27,
     "build": {
       "time": 45,
-      "cost": { "fuel": 290, "tauMetal": 45, "hydrogen": 130 }
+      "cost": {
+        "fuel": 290,
+        "tauMetal": 45,
+        "hydrogen": 130
+      }
     },
-    "damage": { "angle": 35, "value": 2.2, "range": 0.9, "cooldown": 1 },
+    "damage": {
+      "angle": 0.6108652381980153,
+      "value": 2.2,
+      "range": 0.9,
+      "cooldown": 1
+    },
     "range": 2,
     "mining": 0,
     "role": "military",
@@ -381,17 +539,32 @@
     "texture": "sMil",
     "slug": "tauFighter",
     "hitpoints": {
-      "hp": { "value": 95, "regen": 0.2 },
-      "shield": { "value": 45, "regen": 3.5 }
+      "hp": {
+        "value": 95,
+        "regen": 0.2
+      },
+      "shield": {
+        "value": 45,
+        "regen": 3.5
+      }
     }
   },
   {
     "acceleration": 0.18,
     "build": {
       "time": 180,
-      "cost": { "fuel": 920, "tauMetal": 460, "hydrogen": 350 }
+      "cost": {
+        "fuel": 920,
+        "tauMetal": 460,
+        "hydrogen": 350
+      }
     },
-    "damage": { "angle": 30, "value": 9, "range": 1.2, "cooldown": 0.3 },
+    "damage": {
+      "angle": 0.5235987755982988,
+      "value": 9,
+      "range": 1.2,
+      "cooldown": 0.3
+    },
     "range": 2.7,
     "mining": 0,
     "role": "military",
@@ -405,8 +578,14 @@
     "texture": "mMil",
     "slug": "tauFrigate",
     "hitpoints": {
-      "hp": { "value": 390, "regen": 0.2 },
-      "shield": { "value": 155, "regen": 8 }
+      "hp": {
+        "value": 390,
+        "regen": 0.2
+      },
+      "shield": {
+        "value": 155,
+        "regen": 8
+      }
     }
   },
   {
@@ -431,15 +610,32 @@
     "storage": 680,
     "texture": "lMin",
     "slug": "largeMinerA",
-    "damage": { "angle": 30, "value": 3, "range": 1, "cooldown": 0.3 },
+    "damage": {
+      "angle": 0.5235987755982988,
+      "value": 3,
+      "range": 1,
+      "cooldown": 0.3
+    },
     "hitpoints": {
-      "hp": { "value": 830, "regen": 0.2 },
-      "shield": { "value": 310, "regen": 6.5 }
+      "hp": {
+        "value": 830,
+        "regen": 0.2
+      },
+      "shield": {
+        "value": 310,
+        "regen": 6.5
+      }
     }
   },
   {
     "acceleration": 0.1,
-    "build": { "time": 45, "cost": { "fuel": 120, "tauMetal": 35 } },
+    "build": {
+      "time": 45,
+      "cost": {
+        "fuel": 120,
+        "tauMetal": 35
+      }
+    },
     "mining": 0,
     "role": "transport",
     "cruise": 5,
@@ -451,17 +647,32 @@
     "storage": 11,
     "texture": "sCiv",
     "slug": "tauCourier",
-    "damage": { "angle": 30, "value": 1, "range": 1, "cooldown": 0.3 },
+    "damage": {
+      "angle": 0.5235987755982988,
+      "value": 1,
+      "range": 1,
+      "cooldown": 0.3
+    },
     "hitpoints": {
-      "hp": { "value": 80, "regen": 0.2 },
-      "shield": { "value": 35, "regen": 2.5 }
+      "hp": {
+        "value": 80,
+        "regen": 0.2
+      },
+      "shield": {
+        "value": 35,
+        "regen": 2.5
+      }
     }
   },
   {
     "acceleration": 0.15,
     "build": {
       "time": 85,
-      "cost": { "fuel": 240, "hydrogen": 500, "tauMetal": 210 }
+      "cost": {
+        "fuel": 240,
+        "hydrogen": 500,
+        "tauMetal": 210
+      }
     },
     "mining": 0,
     "role": "transport",
@@ -474,15 +685,29 @@
     "storage": 190,
     "texture": "mCiv",
     "slug": "tauFreighter",
-    "damage": { "angle": 30, "value": 2.5, "range": 1, "cooldown": 0.3 },
+    "damage": {
+      "angle": 0.5235987755982988,
+      "value": 2.5,
+      "range": 1,
+      "cooldown": 0.3
+    },
     "hitpoints": {
-      "hp": { "value": 990, "regen": 0.2 },
-      "shield": { "value": 45, "regen": 5 }
+      "hp": {
+        "value": 990,
+        "regen": 0.2
+      },
+      "shield": {
+        "value": 45,
+        "regen": 5
+      }
     }
   },
   {
     "acceleration": 0.23,
-    "build": { "time": 0, "cost": {} },
+    "build": {
+      "time": 0,
+      "cost": {}
+    },
     "mining": 0,
     "role": "military",
     "cruise": 1.7,
@@ -494,15 +719,29 @@
     "storage": 15,
     "texture": "sMil",
     "slug": "roach",
-    "damage": { "angle": 25, "value": 1, "cooldown": 0.2, "range": 0.95 },
+    "damage": {
+      "angle": 0.4363323129985824,
+      "value": 1,
+      "cooldown": 0.2,
+      "range": 0.95
+    },
     "hitpoints": {
-      "hp": { "value": 45, "regen": 0.1 },
-      "shield": { "value": 13, "regen": 2.5 }
+      "hp": {
+        "value": 45,
+        "regen": 0.1
+      },
+      "shield": {
+        "value": 13,
+        "regen": 2.5
+      }
     }
   },
   {
     "acceleration": 0.16,
-    "build": { "time": 0, "cost": {} },
+    "build": {
+      "time": 0,
+      "cost": {}
+    },
     "mining": 0,
     "role": "military",
     "cruise": 1.3,
@@ -514,16 +753,34 @@
     "storage": 230,
     "texture": "lMil",
     "slug": "seahorse",
-    "damage": { "angle": 30, "value": 14, "cooldown": 0.4, "range": 1.75 },
-    "hitpoints": {
-      "hp": { "value": 5700, "regen": 0.4 },
-      "shield": { "value": 430, "regen": 6 }
+    "damage": {
+      "angle": 0.5235987755982988,
+      "value": 14,
+      "cooldown": 0.4,
+      "range": 1.75
     },
-    "docks": { "small": 6, "medium": 2, "large": 0 }
+    "hitpoints": {
+      "hp": {
+        "value": 5700,
+        "regen": 0.4
+      },
+      "shield": {
+        "value": 430,
+        "regen": 6
+      }
+    },
+    "docks": {
+      "small": 6,
+      "medium": 2,
+      "large": 0
+    }
   },
   {
     "acceleration": 0.18,
-    "build": { "time": 0, "cost": {} },
+    "build": {
+      "time": 0,
+      "cost": {}
+    },
     "mining": 0,
     "role": "military",
     "cruise": 1,
@@ -535,10 +792,21 @@
     "storage": 65,
     "texture": "mMil",
     "slug": "stingray",
-    "damage": { "angle": 30, "value": 11, "cooldown": 0.3, "range": 1.35 },
+    "damage": {
+      "angle": 0.5235987755982988,
+      "value": 11,
+      "cooldown": 0.3,
+      "range": 1.35
+    },
     "hitpoints": {
-      "hp": { "value": 490, "regen": 0.2 },
-      "shield": { "value": 90, "regen": 5 }
+      "hp": {
+        "value": 490,
+        "regen": 0.2
+      },
+      "shield": {
+        "value": 90,
+        "regen": 5
+      }
     }
   },
   {
@@ -563,10 +831,21 @@
     "storage": 32,
     "texture": "sMin",
     "slug": "smallMinerA",
-    "damage": { "angle": 30, "value": 1, "cooldown": 0.3, "range": 0.95 },
+    "damage": {
+      "angle": 0.5235987755982988,
+      "value": 1,
+      "cooldown": 0.3,
+      "range": 0.95
+    },
     "hitpoints": {
-      "hp": { "value": 95, "regen": 0.15 },
-      "shield": { "value": 30, "regen": 1.9 }
+      "hp": {
+        "value": 95,
+        "regen": 0.15
+      },
+      "shield": {
+        "value": 30,
+        "regen": 1.9
+      }
     }
   }
 ]
